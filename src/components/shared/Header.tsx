@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ModeToggle } from "./ToggleTheme";
 
 const courseList = [
   {
@@ -142,6 +143,7 @@ function Header() {
       <div className="flex gap-2">
         <Button variant="outline">Login</Button>
         <Button variant="outline">Sign Up</Button>
+        <ModeToggle />
       </div>
     </header>
   );
