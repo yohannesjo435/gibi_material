@@ -1,12 +1,7 @@
 import React from "react";
-import Header from "@/components/Header";
 
 const page = () => {
-  return (
-    <div className="">
-      <Header />
-    </div>
-  );
+  return <div className=""></div>;
 };
 
 export default page;

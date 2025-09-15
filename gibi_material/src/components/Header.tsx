@@ -1,3 +1,4 @@
+"use client";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -8,6 +9,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 const courseList = [
   {
@@ -70,16 +72,17 @@ const blogList = [
 
 function Header() {
   return (
-    <header className="flex justify-around outline-1 items-center h-20">
+    <header className="relative w-full flex flex-col md:flex-row justify-around outline-1 items-center h-32 py-3 md:h-20">
+      <SidebarTrigger className="top-1/2 left-5 -translate-1/2 absolute" />
       <div>GibiMaterial</div>
 
       <NavigationMenu>
         <NavigationMenuList>
           {/* first */}
-          <NavigationMenuItem>
+          <NavigationMenuItem className="">
             <NavigationMenuTrigger>Home</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="w-52">
+              <ul className="w-[150px] md:w-52">
                 <NavigationMenuLink>About us</NavigationMenuLink>
                 <NavigationMenuLink>Contact us</NavigationMenuLink>
                 <NavigationMenuLink>Faq</NavigationMenuLink>
@@ -91,7 +94,7 @@ function Header() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Course</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid md:grid-cols-2 grid-rows-3 w-[400px] md:w-[500px] lg:w-[600px] gap-2">
+              <ul className="grid md:grid-cols-2 grid-rows-3 w-[150px] md:w-[500px] lg:w-[600px] gap-2">
                 {courseList.map(({ title, href }) => (
                   <CourseList key={title} title={title} href={href} />
                 ))}
@@ -103,7 +106,7 @@ function Header() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Blog</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul className="grid md:grid-cols-2 grid-rows-3 w-[400px] md:w-[500px] lg:w-[600px] gap-2">
+              <ul className="grid grid-cols-2 grid-rows-3 w-[250px] md:w-[500px] lg:w-[600px] gap-2">
                 {blogList.map(({ title, href, topic }) => (
                   <BlogList
                     key={title}
@@ -116,7 +119,8 @@ function Header() {
             </NavigationMenuContent>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
+          {/* Fourth */}
+          <NavigationMenuItem className="hidden md:flex">
             <NavigationMenuLink asChild>
               <Link href="/" className="font-semibold">
                 Faculity Dashboard
@@ -124,7 +128,8 @@ function Header() {
             </NavigationMenuLink>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
+          {/* Fifth */}
+          <NavigationMenuItem className="hidden md:flex">
             <NavigationMenuLink asChild>
               <Link href="/" className="font-semibold">
                 Dashboard
@@ -134,7 +139,7 @@ function Header() {
         </NavigationMenuList>
       </NavigationMenu>
 
-      <div>
+      <div className="flex gap-2">
         <Button variant="outline">Login</Button>
         <Button variant="outline">Sign Up</Button>
       </div>
