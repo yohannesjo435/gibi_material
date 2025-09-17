@@ -17,7 +17,20 @@ function Hero() {
       </div>
 
       <div className="flex flex-1 justify-end">
-        <Image src={"/hero.png"} alt="hero" width={500} height={500} />
+        <Image
+          className="hidden md:block"
+          src={"/hero.png"}
+          alt="hero"
+          width={500}
+          height={500}
+        />
+        <Image
+          className="md:hidden"
+          src={"/hero.png"}
+          alt="hero"
+          width={250}
+          height={300}
+        />
       </div>
     </section>
   );
