@@ -5,13 +5,15 @@ import MaterialList from "./MaterialList";
 
 const CourseSection = () => {
   return (
-    <div className="w-[90%] m-auto grid gap-5 my-32">
-      <hr />
-      <CourseBreadcrump />
-      <DepartmentSelector />
-      <DepartmentList />
-      <MaterialList />
-    </div>
+    <>
+      <div className="w-[90%] m-auto grid gap-5 my-32">
+        <hr />
+        <CourseBreadcrump />
+        <DepartmentSelector />
+        <DepartmentList />
+        <MaterialList />
+      </div>
+    </>
   );
 };
 
