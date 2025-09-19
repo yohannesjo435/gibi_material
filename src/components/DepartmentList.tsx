@@ -10,11 +10,15 @@ import {
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-const DepartmentList = () => {
+const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
       {department.map((dep, index) => (
-        <Card key={index} className="cursor-pointer">
+        <Card
+          key={index}
+          className="cursor-pointer"
+          onClick={() => onSelect(dep.id)}
+        >
           <CardHeader className="flex items-center gap-3.5">
             <Image
               src={"/department_icons/is.png"}
@@ -47,6 +51,7 @@ export default DepartmentList;
 
 const department = [
   {
+    id: "1",
     name: "Computer Science",
     nickName: "CS",
     desc: "Computer Science",
@@ -54,6 +59,7 @@ const department = [
     availableYears: 4,
   },
   {
+    id: "2",
     name: "Information Science",
     nickName: "IS",
     desc: "Computer Science",
@@ -61,6 +67,7 @@ const department = [
     availableYears: 4,
   },
   {
+    id: "3",
     name: "Medicine",
     nickName: "Med",
     desc: "Computer Science",
@@ -68,6 +75,7 @@ const department = [
     availableYears: 4,
   },
   {
+    id: "4",
     name: "Pharmacy",
     nickName: "Pharma",
     desc: "Computer Science",
@@ -75,6 +83,7 @@ const department = [
     availableYears: 4,
   },
   {
+    id: "5",
     name: "Computer Science",
     nickName: "CS",
     desc: "Computer Science",
