@@ -3,21 +3,42 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-const CourseBreadcrump = () => {
+import clsx from "clsx";
+const CourseBreadcrump = ({
+  onDepartmentClick,
+  selectedDepartmentId,
+}: {
+  onDepartmentClick: () => void;
+  selectedDepartmentId: string | null;
+}) => {
   return (
     <div>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            <BreadcrumbLink
+              onClick={onDepartmentClick}
+              className={clsx({
+                "font-bold": !selectedDepartmentId,
+              })}
+            >
+              Department
+            </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Department</BreadcrumbLink>
-          </BreadcrumbItem>
+          {selectedDepartmentId && (
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                className={clsx("cursor-pointer", {
+                  "font-bold": selectedDepartmentId,
+                })}
+              >
+                Course
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          )}
         </BreadcrumbList>
       </Breadcrumb>
     </div>

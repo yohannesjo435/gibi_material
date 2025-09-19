@@ -9,11 +9,19 @@ const CourseSection = () => {
   const [selectedDepartmentId, setSelectedDepartmentId] = useState<
     string | null
   >(null);
+
+  const goBackToDepartments = () => {
+    setSelectedDepartmentId(null);
+  };
+
   return (
     <>
       <div className="w-[90%] m-auto grid gap-5 my-32">
         <hr />
-        <CourseBreadcrump />
+        <CourseBreadcrump
+          onDepartmentClick={goBackToDepartments}
+          selectedDepartmentId={selectedDepartmentId}
+        />
         {!selectedDepartmentId && (
           <>
             <DepartmentSelector />

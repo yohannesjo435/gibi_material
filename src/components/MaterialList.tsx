@@ -100,7 +100,7 @@ export default MaterialList;
 
 const course = [
   {
-    name: "Computer Science",
+    name: "C++",
     nickName: "CS",
     author: "Prof Yohannes",
     couseCode: "cs-1011",
@@ -108,7 +108,7 @@ const course = [
     size: " 2.4",
   },
   {
-    name: "Information Science",
+    name: "Networking",
     nickName: "IS",
     author: "Prof Yohannes",
     couseCode: "is-451",
@@ -116,7 +116,7 @@ const course = [
     size: " 2.4",
   },
   {
-    name: "Medicine",
+    name: "Dsa",
     nickName: "Med",
     author: "Prof Yohannes",
     couseCode: "med-101",
@@ -124,7 +124,7 @@ const course = [
     size: " 2.4",
   },
   {
-    name: "Pharmacy",
+    name: "Numerical Analysis",
     nickName: "Pharma",
     author: "Prof Yohannes",
     couseCode: "pharma-11",
@@ -132,7 +132,7 @@ const course = [
     size: " 2.4",
   },
   {
-    name: "Computer Science",
+    name: "Operating System",
     nickName: "CS",
     author: "Prof Yohannes",
     couseCode: "cs-1011",
