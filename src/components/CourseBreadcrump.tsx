@@ -20,7 +20,7 @@ const CourseBreadcrump = ({
           <BreadcrumbItem>
             <BreadcrumbLink
               onClick={onDepartmentClick}
-              className={clsx({
+              className={clsx("cursor-pointer", {
                 "font-bold": !selectedDepartmentId,
               })}
             >

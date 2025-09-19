@@ -24,7 +24,7 @@ import { Eye, Grid2x2, List, HardDriveDownload } from "lucide-react";
 
 const MaterialList = () => {
   return (
-    <div className="flex flex-col md:flex-row gap-10">
+    <div className="flex flex-col lg:flex-row gap-10">
       <FilterMaterial />
 
       <div className="w-full grid gap-3 outline-1 p-5 rounded-[10px]">
@@ -81,10 +81,10 @@ const MaterialList = () => {
                   <Eye />
                   Preview
                 </Button>
-                <Button className="hidden md:block bg-blue-500 ">
+                <Button className="hidden md:block bg-blue-500 cursor-pointer">
                   Download
                 </Button>
-                <Button className="w-[10%] md:hidden ">
+                <Button className="w-[10%] md:hidden cursor-pointer ">
                   <HardDriveDownload />
                 </Button>
               </CardAction>
