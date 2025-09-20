@@ -16,8 +16,7 @@ const CourseSection = () => {
 
   return (
     <>
-      <div className="w-[95%] lg:w-[90%] m-auto grid gap-5 my-32">
-        <hr />
+      <div className="w-[95%] lg:w-[90%] m-auto grid gap-5">
         <CourseBreadcrump
           onDepartmentClick={goBackToDepartments}
           selectedDepartmentId={selectedDepartmentId}

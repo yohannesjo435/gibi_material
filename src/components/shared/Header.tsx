@@ -15,58 +15,58 @@ import { ModeToggle } from "./ToggleTheme";
 const courseList = [
   {
     title: "Bio Tech",
-    href: "/",
+    href: "/course",
   },
   {
     title: "Chemitry",
-    href: "/",
+    href: "/course",
   },
   {
     title: "Physics",
-    href: "/",
+    href: "/course",
   },
   {
     title: "IS",
-    href: "/",
+    href: "/course",
   },
   {
     title: "computer science",
-    href: "/",
+    href: "/course",
   },
   {
     title: "Medicine",
-    href: "/",
+    href: "/course",
   },
 ];
 const blogList = [
   {
     title: "University Guide",
-    href: "/",
+    href: "/course",
     topic: "navigate your new world: the ultimate University Starter Guide",
   },
   {
     title: "Departemnt Guide",
-    href: "/",
+    href: "/course",
     topic: "Choosing Your Path: A Deep Dive into University Department",
   },
   {
     title: "Campus Life",
-    href: "/",
+    href: "/course",
     topic: "Dorms, Clubs and cafteraias: What Campus life really Feels Like",
   },
   {
     title: "University love life",
-    href: "/",
+    href: "/course",
     topic: "Romance in Lecture Halls: the UnWritten Rules of Campus Dating",
   },
   {
     title: "Beyond Campus",
-    href: "/",
+    href: "/course",
     topic: "Beyound the Gates: hoe University Life Shapes Your World Outside",
   },
   {
     title: "Rate Your Univerity",
-    href: "/",
+    href: "/course",
     topic: "You voice Matters: share Your Expreience and Rate Your University",
   },
 ];
@@ -93,7 +93,7 @@ function Header() {
 
           {/* second */}
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Course</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Courses</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid md:grid-cols-2 grid-rows-3 w-[150px] md:w-[500px] lg:w-[600px] gap-2">
                 {courseList.map(({ title, href }) => (

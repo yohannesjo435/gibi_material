@@ -1,13 +1,11 @@
 import CourseSection from "@/components/CourseSection";
-import Hero from "@/components/landing/Hero";
 
-const page = () => {
+function page() {
   return (
-    <div className="grid gap-32">
-      <Hero />
+    <div className="mt-14">
       <CourseSection />
     </div>
   );
-};
+}
 
 export default page;
