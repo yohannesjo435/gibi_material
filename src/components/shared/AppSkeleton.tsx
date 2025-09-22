@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-export function UploadCourseFormSkeleton() {
+export function SkeletonUploadCourseForm() {
   return (
     <div className="grid gap-5 w-[90%] m-auto my-10">
       <div className="flex flex-col space-y-3">
@@ -48,4 +48,11 @@ export function SkeletonCard() {
       </div>
     </div>
   );
+}
+
+export function SkeletonCourseCard() {
+  return <Skeleton className="h-[130px] w-[250px]" />;
+}
+export function SkeletonDepCard() {
+  return <Skeleton className="h-[130px] w-[250px]" />;
 }

@@ -11,7 +11,8 @@ import AppPagination from "./AppPagination";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { SkeletonDepCard } from "./shared/AppSkeleton";
 const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [departmentPerPage] = useState(8);
@@ -27,34 +28,36 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
     <div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 ">
         {currentDepartment.map((dep, index) => (
-          <Card
-            key={index}
-            className="cursor-pointer"
-            onClick={() => onSelect(dep.id)}
-          >
-            <CardHeader className="flex items-center gap-3.5">
-              <Image
-                src={"/department_icons/is.png"}
-                width={25}
-                height={25}
-                alt="course Icons"
-              />
-              <div>
-                <CardTitle>{dep.name}</CardTitle>
-                <CardDescription>{dep.nickName}</CardDescription>
-              </div>
-            </CardHeader>
-            <CardFooter className="flex justify-between">
-              <CardDescription>
-                {dep.availableYears} Years Available
-              </CardDescription>
-              <CardAction>
-                <Link href={"/"}>
-                  <ChevronRight size={15} />
-                </Link>
-              </CardAction>
-            </CardFooter>
-          </Card>
+          <Suspense key={index} fallback={<SkeletonDepCard />}>
+            <Card
+              key={index}
+              className="cursor-pointer"
+              onClick={() => onSelect(dep.id)}
+            >
+              <CardHeader className="flex items-center gap-3.5">
+                <Image
+                  src={"/department_icons/is.png"}
+                  width={25}
+                  height={25}
+                  alt="course Icons"
+                />
+                <div>
+                  <CardTitle>{dep.name}</CardTitle>
+                  <CardDescription>{dep.nickName}</CardDescription>
+                </div>
+              </CardHeader>
+              <CardFooter className="flex justify-between">
+                <CardDescription>
+                  {dep.availableYears} Years Available
+                </CardDescription>
+                <CardAction>
+                  <Link href={"/"}>
+                    <ChevronRight size={15} />
+                  </Link>
+                </CardAction>
+              </CardFooter>
+            </Card>
+          </Suspense>
         ))}
       </div>
       <AppPagination

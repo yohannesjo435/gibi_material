@@ -1,7 +1,5 @@
-import { UploadCourseFormSkeleton } from "@/components/shared/AppSkeleton";
-
 function Loading() {
-  return <UploadCourseFormSkeleton />;
+  return <div></div>;
 }
 
 export default Loading;
