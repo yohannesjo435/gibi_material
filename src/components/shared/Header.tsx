@@ -123,7 +123,7 @@ function Header() {
           {/* Fourth */}
           <NavigationMenuItem className="hidden md:flex">
             <NavigationMenuLink asChild>
-              <Link href="/" className="font-semibold">
+              <Link href="/dashboard/faculty" className="font-semibold">
                 Faculity Dashboard
               </Link>
             </NavigationMenuLink>
@@ -132,7 +132,7 @@ function Header() {
           {/* Fifth */}
           <NavigationMenuItem className="hidden md:flex">
             <NavigationMenuLink asChild>
-              <Link href="/" className="font-semibold">
+              <Link href="/dashboard/owner" className="font-semibold">
                 Dashboard
               </Link>
             </NavigationMenuLink>
