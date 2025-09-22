@@ -57,6 +57,7 @@ const UploadCourseForm = () => {
           </Select>
         </div>
         <Button className="py-5 bg-blue-500 cursor-pointer">Upload</Button>
+        
       </div>
     </div>
   );
