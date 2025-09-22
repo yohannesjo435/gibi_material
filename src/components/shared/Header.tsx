@@ -75,7 +75,7 @@ function Header() {
   return (
     <header className="relative w-full flex flex-col md:flex-row justify-around outline-1 items-center h-32 py-3 md:h-20">
       <SidebarTrigger className="top-1/2 left-5 -translate-1/2 absolute" />
-      <div>GibiMaterial</div>
+      <Link href={"/"}>GibiMaterial</Link>
 
       <NavigationMenu>
         <NavigationMenuList>
@@ -84,9 +84,10 @@ function Header() {
             <NavigationMenuTrigger>Home</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="w-[150px] md:w-52">
-                <NavigationMenuLink>About us</NavigationMenuLink>
-                <NavigationMenuLink>Contact us</NavigationMenuLink>
-                <NavigationMenuLink>Faq</NavigationMenuLink>
+                <NavigationMenuLink href="/">Home Page</NavigationMenuLink>
+                <NavigationMenuLink href="/">About us</NavigationMenuLink>
+                <NavigationMenuLink href="/">Contact us</NavigationMenuLink>
+                <NavigationMenuLink href="/">Faq</NavigationMenuLink>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
