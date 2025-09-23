@@ -54,7 +54,7 @@ const menu = [
   },
   {
     title: "Course",
-    href: "/",
+    href: "/course",
   },
   {
     title: "Blog",
@@ -62,10 +62,10 @@ const menu = [
   },
   {
     title: "Faculity Dashboard",
-    href: "/",
+    href: "/dashboard/faculty",
   },
   {
     title: "Dashboard",
-    href: "/",
+    href: "/dashboard/owner",
   },
 ];
