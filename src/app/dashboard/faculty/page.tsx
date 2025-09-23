@@ -181,7 +181,7 @@ async function page() {
         <UploadCourseForm />
       </Suspense>
 
-      <h1 className="text-4xl mt-10 mb-2">Manage Existing Materials</h1>
+      <h1 className="text-4xl mt-14 mb-2">Manage Existing Materials</h1>
       <h4 className="mb-7 text-gray-500 text-[13px]">
         View and manage your uploaded course materials.{" "}
       </h4>
