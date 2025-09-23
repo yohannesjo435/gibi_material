@@ -6,6 +6,7 @@ import AppSidebar from "@/components/shared/AppSidebar";
 import Header from "@/components/shared/Header";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ClientLayoutWrapper from "@/app/ClientLayoutWrapper";
+import Footer from "@/components/shared/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,6 +44,7 @@ export default function RootLayout({
             <main className="w-full">
               <Header />
               <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+              <Footer />
             </main>
           </SidebarProvider>
         </ThemeProvider>
