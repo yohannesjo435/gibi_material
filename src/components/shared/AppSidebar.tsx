@@ -66,6 +66,6 @@ const menu = [
   },
   {
     title: "Dashboard",
-    href: "/dashboard/owner",
+    href: "/dashboard/manager",
   },
 ];

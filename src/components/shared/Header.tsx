@@ -133,7 +133,7 @@ function Header() {
           {/* Fifth */}
           <NavigationMenuItem className="hidden md:flex">
             <NavigationMenuLink asChild>
-              <Link href="/dashboard/owner" className="font-semibold">
+              <Link href="/dashboard/manager" className="font-semibold">
                 Dashboard
               </Link>
             </NavigationMenuLink>

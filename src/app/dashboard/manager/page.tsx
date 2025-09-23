@@ -214,9 +214,9 @@ async function page() {
   return (
     <div>
       <div className="w-[90%] m-auto my-10 grid gap-3">
-        <h1 className="text-4xl">Owner Panel</h1>
+        <h1 className="text-4xl">Manager Panel</h1>
         <h4 className="mb-5 text-gray-500 text-[13px]">
-          All users (admin, owners)
+          All users (admin, managers)
         </h4>
         <UserDataTable columns={userColumns} data={usersData} />
         {/* the table goes here */}

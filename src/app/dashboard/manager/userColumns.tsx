@@ -20,7 +20,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  role: "faculty" | "owner";
+  role: "faculty" | "manager";
   status: "active" | "inactive";
 };
 
