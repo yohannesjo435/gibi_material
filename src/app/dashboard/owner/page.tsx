@@ -213,8 +213,11 @@ async function page() {
 
   return (
     <div className="w-[87%] m-auto my-10 grid gap-3">
-      <UserDataTable columns={userColumns} data={usersData} />
       <h1 className="text-4xl">Owner Panel</h1>
+      <h4 className="mb-5 text-gray-500 text-[13px]">
+        All users (admin, owners)
+      </h4>
+      <UserDataTable columns={userColumns} data={usersData} />
       {/* the table goes here */}
 
       <Suspense fallback={<SkeletonUploadCourseForm />}>
@@ -224,7 +227,9 @@ async function page() {
       <h4 className="mb-7 text-gray-500 text-[13px]">
         View and manage all uploaded materials.
       </h4>
-      <DataTable columns={columns} data={MaterialData} />
+      <div className="w-[100%]">
+        <DataTable columns={columns} data={MaterialData} />
+      </div>
     </div>
   );
 }

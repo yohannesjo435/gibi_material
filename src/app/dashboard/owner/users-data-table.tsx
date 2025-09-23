@@ -69,7 +69,7 @@ export function UserDataTable<TData, TValue>({
   });
 
   return (
-    <div>
+    <div className="w-full max-w-screen">
       <div className="flex items-center justify-between py-4 ">
         <Input
           placeholder="Filter name..."
@@ -79,7 +79,7 @@ export function UserDataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <div className="flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-4">
           <div className="text-muted-foreground flex-1 text-sm">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
             {table.getFilteredRowModel().rows.length} row(s) selected.
