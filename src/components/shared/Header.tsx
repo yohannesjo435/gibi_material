@@ -142,8 +142,13 @@ function Header() {
       </NavigationMenu>
 
       <div className="flex gap-2">
-        <Button variant="outline">Login</Button>
-        <Button variant="outline">Sign Up</Button>
+        <Link href={"/auth/login"}>
+          <Button variant="outline">Login</Button>
+        </Link>
+
+        <Link href={"/auth/signup"}>
+          <Button variant="outline">Sign Up</Button>
+        </Link>
         <ModeToggle />
       </div>
     </header>

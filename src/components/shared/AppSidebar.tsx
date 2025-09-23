@@ -37,8 +37,18 @@ const AppSidebar = () => {
           <SidebarGroup />
         </SidebarContent>
         <SidebarFooter>
-          <Button variant="outline">Login</Button>
-          <Button variant="outline">Sign Up</Button>
+          <Link
+            className="border-1 bg-[#e1e8f0] py-2 text-black rounded-[7px] text-[13px] font-[600] text-center"
+            href={"/auth/login"}
+          >
+            Login
+          </Link>
+          <Link
+            className="border-1 bg-[#e1e8f0] py-2 text-black rounded-[7px] text-[13px] font-[600] text-center"
+            href={"/auth/signup"}
+          >
+            Sign Up
+          </Link>
         </SidebarFooter>
       </Sidebar>
     </div>
