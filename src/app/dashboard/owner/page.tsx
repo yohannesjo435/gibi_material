@@ -2,7 +2,9 @@ import React, { Suspense } from "react";
 import UploadCourseForm from "../components/UploadCourseForm";
 import { SkeletonUploadCourseForm } from "@/components/shared/AppSkeleton";
 import { columns, Course } from "./columns";
+import { userColumns, User } from "./userColumns";
 
+import { UserDataTable } from "./users-data-table";
 import { DataTable } from "../components/data-table";
 
 async function getData(): Promise<Course[]> {
@@ -171,12 +173,47 @@ async function getData(): Promise<Course[]> {
     },
   ];
 }
+async function getUsers(): Promise<User[]> {
+  // Fetch data from your API here.
+  return [
+    {
+      id: "1234dfg",
+      name: "abebe",
+      email: "abebe@gmail.com",
+      role: "faculty",
+      status: "active",
+    },
+    {
+      id: "1234dfefdg",
+      name: "mesert",
+      email: "abebe@gmail.com",
+      role: "faculty",
+      status: "active",
+    },
+    {
+      id: "1234wefdfg",
+      name: "jo",
+      email: "abebe@gmail.com",
+      role: "faculty",
+      status: "active",
+    },
+    {
+      id: "1234234dfg",
+      name: "mike",
+      email: "abebe@gmail.com",
+      role: "faculty",
+      status: "active",
+    },
+  ];
+}
 
 async function page() {
-  const data = await getData();
+  const MaterialData = await getData();
+  const usersData = await getUsers();
 
   return (
     <div className="w-[87%] m-auto my-10 grid gap-3">
+      <UserDataTable columns={userColumns} data={usersData} />
       <h1 className="text-4xl">Owner Panel</h1>
       {/* the table goes here */}
 
@@ -187,7 +224,7 @@ async function page() {
       <h4 className="mb-7 text-gray-500 text-[13px]">
         View and manage all uploaded materials.
       </h4>
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={MaterialData} />
     </div>
   );
 }
