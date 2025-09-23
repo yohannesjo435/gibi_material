@@ -212,22 +212,23 @@ async function page() {
   const usersData = await getUsers();
 
   return (
-    <div className="w-[87%] m-auto my-10 grid gap-3">
-      <h1 className="text-4xl">Owner Panel</h1>
-      <h4 className="mb-5 text-gray-500 text-[13px]">
-        All users (admin, owners)
-      </h4>
-      <UserDataTable columns={userColumns} data={usersData} />
-      {/* the table goes here */}
-
-      <Suspense fallback={<SkeletonUploadCourseForm />}>
-        <UploadCourseForm />
-      </Suspense>
-      <h1 className="text-4xl mt-14 mb-2">All Live Materials</h1>
-      <h4 className="mb-7 text-gray-500 text-[13px]">
-        View and manage all uploaded materials.
-      </h4>
-      <div className="w-[100%]">
+    <div>
+      <div className="w-[90%] m-auto my-10 grid gap-3">
+        <h1 className="text-4xl">Owner Panel</h1>
+        <h4 className="mb-5 text-gray-500 text-[13px]">
+          All users (admin, owners)
+        </h4>
+        <UserDataTable columns={userColumns} data={usersData} />
+        {/* the table goes here */}
+        <Suspense fallback={<SkeletonUploadCourseForm />}>
+          <UploadCourseForm />
+        </Suspense>
+        <h1 className="text-4xl mt-14 mb-2">All Live Materials</h1>
+        <h4 className="mb-7 text-gray-500 text-[13px]">
+          View and manage all uploaded materials.
+        </h4>
+      </div>
+      <div className="mx-[2%]">
         <DataTable columns={columns} data={MaterialData} />
       </div>
     </div>

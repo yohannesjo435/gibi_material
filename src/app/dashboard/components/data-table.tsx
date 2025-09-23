@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="w-full max-w-screen">
+    <div className="">
       <div className="flex items-center justify-between py-4 ">
         <Input
           placeholder="Filter course..."
