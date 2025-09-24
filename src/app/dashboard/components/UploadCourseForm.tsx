@@ -30,7 +30,7 @@ const UploadCourseForm = () => {
           <Input />
         </div>
         <div className="grid gap-4">
-          <Label>Topic</Label>
+          <Label>Tag</Label>
           <Input />
         </div>
 
@@ -57,7 +57,6 @@ const UploadCourseForm = () => {
           </Select>
         </div>
         <Button className="py-5 bg-blue-500 cursor-pointer">Upload</Button>
-        
       </div>
     </div>
   );

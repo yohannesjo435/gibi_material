@@ -11,7 +11,6 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 const AppSidebar = () => {
   return (
@@ -27,7 +26,7 @@ const AppSidebar = () => {
             <SidebarMenu>
               {menu.map(({ title, href }, index) => (
                 <SidebarMenuItem key={index}>
-                  <SidebarMenuButton>
+                  <SidebarMenuButton asChild>
                     <Link href={href}>{title}</Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

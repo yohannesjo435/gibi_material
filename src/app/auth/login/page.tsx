@@ -14,7 +14,7 @@ import Link from "next/link";
 
 function page() {
   return (
-    <div className="grid h-[80vh] w-[90%] max-w-[600px] m-auto md:mt-10">
+    <div className="grid h-[80vh] w-[90%] max-w-[600px] m-auto md:mt-10 ">
       <h1 className="text-4xl -mb-5 text-center">Welcome Back</h1>
       <h4 className=" text-gray-500 text-[13px] text-center">
         login and manage the Courses

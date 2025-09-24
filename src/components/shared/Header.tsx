@@ -73,7 +73,7 @@ const blogList = [
 
 function Header() {
   return (
-    <header className="relative w-full flex flex-col md:flex-row justify-around outline-1 items-center h-32 py-3 md:h-20">
+    <header className="sticky top-0 dark:bg-[#030619] bg-[#ffffff] w-full flex flex-col md:flex-row justify-around outline-1 items-center h-32 py-3 md:h-20 max-w-[1500px] m-auto">
       <SidebarTrigger className="top-1/2 left-5 -translate-1/2 absolute" />
       <Link href={"/"}>GibiMaterial</Link>
 

@@ -42,9 +42,9 @@ const Footer = () => {
 
         <Link
           href={"/#aboutSection"}
-          className="p-3 flex flex-1 justify-between rounded-lg text-black bg-indigo-50 font-mono text-3xl lg:text-[50px] outline-1"
+          className="p-3 flex flex-1 justify-between rounded-lg text-black bg-indigo-50 font-mono text-3xl lg:text-[35px] outline-1"
         >
-          <h1>AboutUs</h1>
+          <h1 className="my-4">AboutUs</h1>
 
           <div className="h-max my-2 hover:-rotate-45 ease-in-out duration-150">
             <svg
@@ -67,9 +67,9 @@ const Footer = () => {
 
         <Link
           href={"#faq"}
-          className="p-3 flex flex-1 justify-between rounded-lg text-black bg-indigo-50 font-mono text-3xl lg:text-[50px] outline-1"
+          className="p-3 flex flex-1 justify-between rounded-lg text-black bg-indigo-50 font-mono text-3xl lg:text-[35px] outline-1"
         >
-          <h1>FAQs</h1>
+          <h1 className="my-4">FAQs</h1>
 
           <div className="h-max my-2 hover:-rotate-45 ease-in-out duration-150">
             <svg
@@ -91,7 +91,7 @@ const Footer = () => {
         </Link>
       </div>
 
-      <div className="flex justify-center text-[14px] font-mono">
+      <div className="flex justify-center text-[14px] font-sans mb-1">
         <Label>copyright 2025 website by GofereTech </Label>
       </div>
     </footer>
