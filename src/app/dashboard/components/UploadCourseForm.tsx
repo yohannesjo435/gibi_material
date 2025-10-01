@@ -15,22 +15,52 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { uploadFile } from "@/lib/storage";
+import { supabase } from "@/lib/supabaseClient";
 
 const UploadCourseForm = () => {
   const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [fileType, setFileType] = useState("");
   const bucket = "study_materials";
 
-  async function handleUpload(e: React.FormEvent) {
+  const [title, setTitle] = useState("");
+  const [tagsState, setTags] = useState("");
+  const [descriptionState, setDescription] = useState("");
+
+  async function handleUpload(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const key = `${Date.now()}-${file?.name}`;
-    if (!file) return;
+    if (!file || !title || !fileType) {
+      alert("Please fill out all fields and select a file.");
+      return;
+    }
+    const sanitizedName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
+    const key = `${Date.now()}-${sanitizedName}`;
+
+    const form = new FormData(e.currentTarget);
+    const courseName = form.get("courseName") as string; //aka title
+    const tag = form.get("tag") as string;
+    const tags = [tag];
+    const description = form.get("description") as string;
+
+    setIsUploading(true);
     try {
       const { url } = await uploadFile(bucket, key, file);
+
+      const { error } = await supabase.from("study_material").insert({
+        title: courseName,
+        tags,
+        description: description,
+        file_type: fileType,
+        file_url: url,
+      });
+      if (error) throw error;
       setUrl(url);
     } catch (err) {
       console.error("Upload failed: ", err);
+      setIsUploading(false);
     }
+    setIsUploading(false);
   }
   return (
     <form className="grid" onSubmit={handleUpload}>
@@ -53,21 +83,33 @@ const UploadCourseForm = () => {
       <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
         <div className="grid gap-4">
           <Label>Course Name</Label>
-          <Input />
+          <Input
+            name="courseName"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </div>
         <div className="grid gap-4">
           <Label>Tag</Label>
-          <Input />
+          <Input
+            name="tag"
+            value={tagsState}
+            onChange={(e) => setTags(e.target.value)}
+          />
         </div>
 
         <div className="grid gap-4">
           <Label>Short Description</Label>
-          <Textarea />
+          <Textarea
+            name="description"
+            value={descriptionState}
+            onChange={(e) => e.target.value}
+          />
         </div>
 
         <div className="grid gap-4 my-10 ">
           <Label>File Type</Label>
-          <Select>
+          <Select onValueChange={setFileType}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="pdf, ppt, docs " />
             </SelectTrigger>
@@ -77,12 +119,16 @@ const UploadCourseForm = () => {
                 <SelectItem value="pdf">PDF</SelectItem>
                 <SelectItem value="ppt">PPT</SelectItem>
                 <SelectItem value="docs">docs</SelectItem>
-                <SelectItem value="pub">pub</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
-        <Button className="py-5 bg-blue-500 cursor-pointer">Upload</Button>
+        <Button
+          className="py-5 bg-blue-500 cursor-pointer"
+          disabled={isUploading}
+        >
+          Upload
+        </Button>
       </div>
     </form>
   );
