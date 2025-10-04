@@ -1,3 +1,4 @@
+"use client";
 import {
   Card,
   CardAction,
@@ -21,8 +22,21 @@ import { FilterMaterial } from "./FilterMaterial";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { Eye, Grid2x2, List, HardDriveDownload } from "lucide-react";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const MaterialList = () => {
+  const [courses, setCourse] = useState("");
+  useEffect(() => {
+    async function fetchCourses() {
+      const res = await fetch("/api/courses");
+      const data = await res.json();
+      setCourse(data);
+    }
+    fetchCourses();
+    console.log("courses: ", courses);
+  }, []);
+
   return (
     <div className="flex flex-col lg:flex-row gap-10">
       <FilterMaterial />

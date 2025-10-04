@@ -14,13 +14,18 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Toaster, toast } from "sonner";
+
 import { uploadFile } from "@/lib/storage";
 import { supabase } from "@/lib/supabaseClient";
 
 const UploadCourseForm = () => {
   const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState("");
+
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadSucess, setUploadSucess] = useState(false);
+
   const [fileType, setFileType] = useState("");
   const bucket = "study_materials";
 
@@ -56,6 +61,7 @@ const UploadCourseForm = () => {
       });
       if (error) throw error;
       setUrl(url);
+      setUploadSucess(true);
     } catch (err) {
       console.error("Upload failed: ", err);
       setIsUploading(false);
@@ -87,6 +93,7 @@ const UploadCourseForm = () => {
             name="courseName"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            required
           />
         </div>
         <div className="grid gap-4">
@@ -103,7 +110,7 @@ const UploadCourseForm = () => {
           <Textarea
             name="description"
             value={descriptionState}
-            onChange={(e) => e.target.value}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </div>
 
@@ -123,6 +130,8 @@ const UploadCourseForm = () => {
             </SelectContent>
           </Select>
         </div>
+        <Toaster />
+        {uploadSucess && toast.success("The file has been uploaded")}
         <Button
           className="py-5 bg-blue-500 cursor-pointer"
           disabled={isUploading}
@@ -136,12 +145,12 @@ const UploadCourseForm = () => {
 
 export default UploadCourseForm;
 
-export function UploadInput() {
-  return (
-    <div className="text-center flex flex-col justify-center items-center gap-4 w-full h-full">
-      <CloudUpload />
-      <Label>Upload</Label>
-      <Input className="max-w-48" type="file" />
-    </div>
-  );
-}
+// export function UploadInput() {
+//   return (
+//     <div className="text-center flex flex-col justify-center items-center gap-4 w-full h-full">
+//       <CloudUpload />
+//       <Label>Upload</Label>
+//       <Input className="max-w-48" type="file" />
+//     </div>
+//   );
+// }
