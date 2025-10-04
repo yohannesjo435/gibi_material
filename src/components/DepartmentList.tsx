@@ -1,3 +1,4 @@
+"use client";
 import {
   Card,
   CardAction,
@@ -13,7 +14,30 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { Suspense, useState } from "react";
 import { SkeletonDepCard } from "./shared/AppSkeleton";
+import { useEffect } from "react";
 const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
+  const [departments, setDepartments] = useState([]);
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const res = await fetch("/api/departments");
+        if (!res) throw new Error("Failed to fetch Departments. ");
+        const data = await res.json();
+        setDepartments(data);
+      } catch (err) {
+        console.error("fetch Error: ", err);
+      }
+    };
+
+    fetchDepartments();
+  }, []);
+
+  useEffect(() => {
+    if (departments.length > 0) {
+      console.log("departments: ", departments);
+    }
+  }, [departments]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [departmentPerPage] = useState(8);
 

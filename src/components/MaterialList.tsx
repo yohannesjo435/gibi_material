@@ -29,13 +29,23 @@ const MaterialList = () => {
   const [courses, setCourse] = useState("");
   useEffect(() => {
     async function fetchCourses() {
-      const res = await fetch("/api/courses");
-      const data = await res.json();
-      setCourse(data);
+      try {
+        const res = await fetch("/api/courses");
+        if (!res) throw new Error("Failed to fetch Courses. ");
+        const data = await res.json();
+        setCourse(data);
+      } catch (err) {
+        console.error("Fetch error", err);
+      }
     }
     fetchCourses();
-    console.log("courses: ", courses);
   }, []);
+
+  useEffect(() => {
+    if (courses.length > 0) {
+      console.log("courses: ", courses);
+    }
+  }, [courses]);
 
   return (
     <div className="flex flex-col lg:flex-row gap-10">
