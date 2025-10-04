@@ -12,10 +12,21 @@ import AppPagination from "./AppPagination";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { SkeletonDepCard } from "./shared/AppSkeleton";
 import { useEffect } from "react";
+
+interface Department {
+  id: string;
+  name: string;
+  short_name: string;
+  available_files: number;
+  available_years: Array<string>;
+  icon_url: string;
+}
+
 const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
+  const [loading, setloading] = useState(true);
   const [departments, setDepartments] = useState([]);
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -26,6 +37,8 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
         setDepartments(data);
       } catch (err) {
         console.error("fetch Error: ", err);
+      } finally {
+        setloading(false);
       }
     };
 
@@ -34,7 +47,7 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
 
   useEffect(() => {
     if (departments.length > 0) {
-      console.log("departments: ", departments);
+      // console.log("departments: ", departments);
     }
   }, [departments]);
 
@@ -44,50 +57,58 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
   //get Current Department
   const indexOfLastDep = currentPage * departmentPerPage;
   const indexOfFirstDep = indexOfLastDep - departmentPerPage;
-  const currentDepartment = department.slice(indexOfFirstDep, indexOfLastDep);
+  const currentDepartment = departments.slice(indexOfFirstDep, indexOfLastDep);
 
   //change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   return (
     <div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 ">
-        {currentDepartment.map((dep, index) => (
-          <Suspense key={index} fallback={<SkeletonDepCard />}>
-            <Card
-              key={index}
-              className="cursor-pointer"
-              onClick={() => onSelect(dep.id)}
-            >
-              <CardHeader className="flex items-center gap-3.5">
-                <Image
-                  src={"/department_icons/is.png"}
-                  width={25}
-                  height={25}
-                  alt="course Icons"
-                />
-                <div>
-                  <CardTitle>{dep.name}</CardTitle>
-                  <CardDescription>{dep.nickName}</CardDescription>
-                </div>
-              </CardHeader>
-              <CardFooter className="flex justify-between">
-                <CardDescription>
-                  {dep.availableYears} Years Available
-                </CardDescription>
-                <CardAction>
-                  <Link href={"/"}>
-                    <ChevronRight size={15} />
-                  </Link>
-                </CardAction>
-              </CardFooter>
-            </Card>
-          </Suspense>
-        ))}
+        {loading ? (
+          <>
+            {Array.from({ length: departmentPerPage }, (_, index) => (
+              <SkeletonDepCard key={index} />
+            ))}
+          </>
+        ) : (
+          <>
+            {currentDepartment.map((dep: Department, index) => (
+              <Card
+                key={index}
+                className="cursor-pointer"
+                onClick={() => onSelect(dep.id)}
+              >
+                <CardHeader className="flex items-center gap-3.5">
+                  <Image
+                    src={"/department_icons/is.png"}
+                    width={25}
+                    height={25}
+                    alt="course Icons"
+                  />
+                  <div>
+                    <CardTitle>{dep.name}</CardTitle>
+                    <CardDescription>{dep.short_name}</CardDescription>
+                  </div>
+                </CardHeader>
+                <CardFooter className="flex justify-between">
+                  <CardDescription>
+                    {dep.available_years.length} Years Available
+                  </CardDescription>
+                  <CardAction>
+                    <Link href={"/"}>
+                      <ChevronRight size={15} />
+                    </Link>
+                  </CardAction>
+                </CardFooter>
+              </Card>
+            ))}
+          </>
+        )}
       </div>
       <AppPagination
         className="mt-5 md:mt-10 shadow-2xs"
         depPerPage={departmentPerPage}
-        totalDep={department.length}
+        totalDep={departments.length}
         paginate={paginate}
         currentPage={currentPage}
       />
@@ -96,174 +117,3 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
 };
 
 export default DepartmentList;
-
-const department = [
-  {
-    id: "1",
-    name: "Computer Science",
-    nickName: "CS",
-    desc: "Computer Science",
-    couseCode: "cs-1011",
-    availableYears: 4,
-  },
-  {
-    id: "2",
-    name: "Information Science",
-    nickName: "IS",
-    desc: "Computer Science",
-    couseCode: "is-451",
-    availableYears: 4,
-  },
-  {
-    id: "3",
-    name: "Medicine",
-    nickName: "Med",
-    desc: "Computer Science",
-    couseCode: "med-101",
-    availableYears: 4,
-  },
-  {
-    id: "4",
-    name: "Pharmacy",
-    nickName: "Pharma",
-    desc: "Computer Science",
-    couseCode: "pharma-11",
-    availableYears: 4,
-  },
-  {
-    id: "5",
-    name: "Computer Science",
-    nickName: "CS",
-    desc: "Computer Science",
-    couseCode: "cs-1011",
-    availableYears: 4,
-  },
-  {
-    id: "4",
-    name: "Pharmacy",
-    nickName: "Pharma",
-    desc: "Computer Science",
-    couseCode: "pharma-11",
-    availableYears: 4,
-  },
-  {
-    id: "5",
-    name: "Computer Science",
-    nickName: "CS",
-    desc: "Computer Science",
-    couseCode: "cs-1011",
-    availableYears: 4,
-  },
-  {
-    id: "4",
-    name: "Pharmacy",
-    nickName: "Pharma",
-    desc: "Computer Science",
-    couseCode: "pharma-11",
-    availableYears: 4,
-  },
-  {
-    id: "5",
-    name: "Computer Science",
-    nickName: "CS",
-    desc: "Computer Science",
-    couseCode: "cs-1011",
-    availableYears: 4,
-  },
-  {
-    id: "4",
-    name: "Pharmacy",
-    nickName: "Pharma",
-    desc: "Computer Science",
-    couseCode: "pharma-11",
-    availableYears: 4,
-  },
-  {
-    id: "5",
-    name: "Computer Science",
-    nickName: "CS",
-    desc: "Computer Science",
-    couseCode: "cs-1011",
-    availableYears: 4,
-  },
-  {
-    id: "4",
-    name: "Pharmacy",
-    nickName: "Pharma",
-    desc: "Computer Science",
-    couseCode: "pharma-11",
-    availableYears: 4,
-  },
-  {
-    id: "5",
-    name: "Computer Science",
-    nickName: "CS",
-    desc: "Computer Science",
-    couseCode: "cs-1011",
-    availableYears: 4,
-  },
-  {
-    id: "4",
-    name: "Pharmacy",
-    nickName: "Pharma",
-    desc: "Computer Science",
-    couseCode: "pharma-11",
-    availableYears: 4,
-  },
-  {
-    id: "5",
-    name: "Computer Science",
-    nickName: "CS",
-    desc: "Computer Science",
-    couseCode: "cs-1011",
-    availableYears: 4,
-  },
-  {
-    id: "4",
-    name: "Pharmacy",
-    nickName: "Pharma",
-    desc: "Computer Science",
-    couseCode: "pharma-11",
-    availableYears: 4,
-  },
-  {
-    id: "5",
-    name: "Computer Science",
-    nickName: "CS",
-    desc: "Computer Science",
-    couseCode: "cs-1011",
-    availableYears: 4,
-  },
-  {
-    id: "4",
-    name: "Pharmacy",
-    nickName: "Pharma",
-    desc: "Computer Science",
-    couseCode: "pharma-11",
-    availableYears: 4,
-  },
-  {
-    id: "5",
-    name: "Computer Science",
-    nickName: "CS",
-    desc: "Computer Science",
-    couseCode: "cs-1011",
-    availableYears: 4,
-  },
-  {
-    id: "4",
-    name: "Pharmacy",
-    nickName: "Pharma",
-    desc: "Computer Science",
-    couseCode: "pharma-11",
-    availableYears: 4,
-  },
-  {
-    id: "5",
-    name: "Computer Science",
-    nickName: "CS",
-    desc: "Computer Science",
-    couseCode: "cs-1011",
-    availableYears: 4,
-  },
-];

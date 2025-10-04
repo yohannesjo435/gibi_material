@@ -27,7 +27,9 @@ const CourseSection = () => {
             <DepartmentList onSelect={setSelectedDepartmentId} />
           </>
         )}
-        {selectedDepartmentId && <MaterialList />}
+        {selectedDepartmentId && (
+          <MaterialList departmentId={selectedDepartmentId} />
+        )}
       </div>
     </>
   );
