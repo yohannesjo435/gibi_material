@@ -2,7 +2,6 @@
 import {
   Card,
   CardAction,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -21,7 +20,7 @@ import { FilterMaterial } from "./FilterMaterial";
 
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { Eye, Grid2x2, List, HardDriveDownload } from "lucide-react";
+import { Eye, HardDriveDownload } from "lucide-react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { SkeletonDepCard } from "./shared/AppSkeleton";
@@ -33,14 +32,15 @@ interface CourseType {
   department_id: string;
   file_size_bytes: number;
   file_url: string;
+  file_key: string;
   uploaded_at: string;
+  original_filename: string;
 }
 
 const MaterialList = ({ departmentId }: { departmentId: string }) => {
   const [courses, setCourse] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  console.log("department Id ", departmentId);
   useEffect(() => {
     async function fetchCourses() {
       try {
@@ -59,7 +59,7 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
 
   useEffect(() => {
     if (courses.length > 0) {
-      // console.log("courses: ", courses);
+      console.log("courses: ", courses);
     }
   }, [courses]);
 
@@ -73,6 +73,18 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
       dateStyle: "short",
       // timeStyle: "short",
     }).format(date);
+  }
+
+  async function handleDownload(url: string, filename: string) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
   return (
     <div className="flex flex-col lg:flex-row gap-10">
@@ -97,8 +109,6 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            {/* <Grid2x2 className="hidden md:block" size={18} />
-            <List className="hidden md:block" size={18} /> */}
           </div>
         </div>
         <div className="space-y-4 h-max">
@@ -142,17 +152,26 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
                     </div>
                   </CardHeader>
                   <CardFooter className="flex justify-end">
-                    <CardAction className="w-full flex justify-end gap-2">
+                    <CardAction className="w-full flex justify-end gap-2 md:max-w-max">
+                      <a href={dep.file_url} className="w-full">
+                        <Button
+                          className="w-[100%] md:w-max bg-blue-500 md:bg-gray-200"
+                          variant={"outline"}
+                        >
+                          <Eye />
+                          Preview
+                        </Button>
+                      </a>
+
                       <Button
-                        variant={"outline"}
-                        className="w-[90%] md:w-max bg-blue-500  md:bg-gray-200"
+                        onClick={() =>
+                          handleDownload(dep.file_url, dep.original_filename)
+                        }
+                        className="hidden md:block bg-blue-500 cursor-pointer"
                       >
-                        <Eye />
-                        Preview
-                      </Button>
-                      <Button className="hidden md:block bg-blue-500 cursor-pointer">
                         Download
                       </Button>
+
                       <Button className="w-[10%] md:hidden cursor-pointer ">
                         <HardDriveDownload />
                       </Button>

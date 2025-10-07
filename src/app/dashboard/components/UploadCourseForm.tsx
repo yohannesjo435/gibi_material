@@ -58,6 +58,8 @@ const UploadCourseForm = () => {
         description: description,
         file_type: fileType,
         file_url: url,
+        file_key: key,
+        original_filename: file.name,
       });
       if (error) throw error;
       setUrl(url);
