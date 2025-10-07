@@ -24,6 +24,7 @@ import { Eye, HardDriveDownload } from "lucide-react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { SkeletonDepCard } from "./shared/AppSkeleton";
+import { toast } from "sonner";
 
 interface CourseType {
   title: string;
@@ -40,6 +41,7 @@ interface CourseType {
 const MaterialList = ({ departmentId }: { departmentId: string }) => {
   const [courses, setCourse] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [downloadingFileKey, setDownloadingFileKey] = useState("");
 
   useEffect(() => {
     async function fetchCourses() {
@@ -75,16 +77,28 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
     }).format(date);
   }
 
-  async function handleDownload(url: string, filename: string) {
-    const response = await fetch(url);
-    const blob = await response.blob();
+  async function handleDownload(
+    url: string,
+    filename: string,
+    file_key: string
+  ) {
+    try {
+      setDownloadingFileKey(file_key);
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      toast.success(`success fully downloaded ${filename}`);
+    } catch (err) {
+      console.error("Failed to download: ", err);
+    } finally {
+      setDownloadingFileKey("");
+    }
   }
   return (
     <div className="flex flex-col lg:flex-row gap-10">
@@ -111,6 +125,7 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
             </Select>
           </div>
         </div>
+
         <div className="space-y-4 h-max">
           {loading ? (
             <>
@@ -162,11 +177,15 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
                           Preview
                         </Button>
                       </a>
-
                       <Button
                         onClick={() =>
-                          handleDownload(dep.file_url, dep.original_filename)
+                          handleDownload(
+                            dep.file_url,
+                            dep.original_filename,
+                            dep.file_key
+                          )
                         }
+                        disabled={downloadingFileKey === dep.file_key}
                         className="hidden md:block bg-blue-500 cursor-pointer"
                       >
                         Download

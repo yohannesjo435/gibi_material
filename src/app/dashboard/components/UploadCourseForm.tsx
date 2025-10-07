@@ -132,7 +132,6 @@ const UploadCourseForm = () => {
             </SelectContent>
           </Select>
         </div>
-        <Toaster />
         {uploadSucess && toast.success("The file has been uploaded")}
         <Button
           className="py-5 bg-blue-500 cursor-pointer"

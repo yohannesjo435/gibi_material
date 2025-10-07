@@ -7,6 +7,7 @@ import Header from "@/components/shared/Header";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ClientLayoutWrapper from "@/app/ClientLayoutWrapper";
 import Footer from "@/components/shared/Footer";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SidebarProvider defaultOpen={false}>
+            <Toaster />
             <AppSidebar />
             <main className="w-full">
               <Header />
