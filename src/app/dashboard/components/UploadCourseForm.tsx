@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 import { uploadFile } from "@/lib/storage";
 import { supabase } from "@/lib/supabaseClient";
@@ -85,6 +85,7 @@ const UploadCourseForm = () => {
             className="max-w-48"
             type="file"
             onChange={(e) => setFile(e.target.files?.[0] || null)}
+            required
           />
         </div>{" "}
       </div>
@@ -118,7 +119,7 @@ const UploadCourseForm = () => {
 
         <div className="grid gap-4 my-10 ">
           <Label>File Type</Label>
-          <Select onValueChange={setFileType}>
+          <Select onValueChange={setFileType} required>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="pdf, ppt, docs " />
             </SelectTrigger>
@@ -145,13 +146,3 @@ const UploadCourseForm = () => {
 };
 
 export default UploadCourseForm;
-
-// export function UploadInput() {
-//   return (
-//     <div className="text-center flex flex-col justify-center items-center gap-4 w-full h-full">
-//       <CloudUpload />
-//       <Label>Upload</Label>
-//       <Input className="max-w-48" type="file" />
-//     </div>
-//   );
-// }
