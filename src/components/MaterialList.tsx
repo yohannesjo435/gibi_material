@@ -100,6 +100,7 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
       setDownloadingFileKey("");
     }
   }
+
   return (
     <div className="flex flex-col lg:flex-row gap-10">
       <FilterMaterial />
