@@ -36,7 +36,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import React from "react";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Faculty {
   id: string;
@@ -50,7 +51,8 @@ const CreateDepartmentForm = () => {
   const [iconFile, setIconFile] = useState<File | null>(null);
   const [facultyId, setFacultyId] = useState("");
   const [faculties, setFaculties] = useState<Faculty[]>([]);
-
+  const [newFaculty, setNewFaculty] = useState("");
+  const [isCreatingFacutly, setIsCreatingFacutly] = useState(false);
   useEffect(() => {
     async function fetchFaculties() {
       try {
@@ -75,10 +77,9 @@ const CreateDepartmentForm = () => {
     e.preventDefault();
     function changeAvailbleYearsToArray(availableYears: number) {
       const result = [];
-      for (let i = 1; i < availableYears; i++) {
-        result.push(`year ${i}`);
+      for (let i = 0; i < availableYears; i++) {
+        result.push(`year ${i + 1}`);
       }
-      console.log("result: ", result);
       return result;
     }
     const formData = {
@@ -97,6 +98,34 @@ const CreateDepartmentForm = () => {
     const result = await res.json();
     console.log("Server response: ", result);
   }
+
+  async function handleCreateFaculty() {
+    console.log("new: ", newFaculty);
+    if (!newFaculty.trim()) return;
+    setIsCreatingFacutly(true);
+
+    try {
+      const res = await fetch("/api/faculty/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newFaculty.trim() }),
+      });
+
+      if (res.ok) {
+        toast.success(`Faculty "${newFaculty}" created`);
+        const data = await res.json();
+        setFacultyId(data.facultyId);
+      } else {
+        toast.error("Failed to create faculty");
+        setNewFaculty("");
+      }
+    } catch {
+      toast.error("Server error");
+    } finally {
+      setIsCreatingFacutly(false);
+    }
+  }
+
   return (
     <form className="grid outline-4 mt-20" onSubmit={handleSubmit}>
       <h3 className="text-[28px] font-semibold">Create Deparment</h3>
@@ -116,7 +145,7 @@ const CreateDepartmentForm = () => {
           />
         </div>{" "}
       </div>
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
         <div className="grid gap-4">
           <Label>Department Name</Label>
           <Input
@@ -147,27 +176,29 @@ const CreateDepartmentForm = () => {
           />
         </div>
 
-        <div className="flex gap-6 md:gap-2 flex-col md:flex-row my-5 md:my-10 ">
-          {/* <div className="grid gap-4 ">
-            <Label>choose Faculty </Label>
-            <Select
-              // onValueChange={setFileType}
-              required
-            >
-              <SelectTrigger className="w-full md:w-[150px]">
-                <SelectValue placeholder="pdf, ppt, docs " />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>File Type</SelectLabel>
-                  <SelectItem value="pdf">PDF</SelectItem>
-                  <SelectItem value="ppt">PPT</SelectItem>
-                  <SelectItem value="docs">docs</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div> */}
-          <div className="grid gap-4 ">
+        <div className="flex justify-evenly gap-6 md:gap-5 flex-col md:flex-row my-5 md:my-10 ">
+          <div className="grid gap-4 w-full">
+            <Label>
+              Add Faculty
+              <span className="text-red-500 text-[13px]">
+                (if the faculty does not exist)*
+              </span>
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                value={newFaculty}
+                onChange={(e) => setNewFaculty(e.target.value)}
+              />
+              <Button
+                type="button"
+                onClick={handleCreateFaculty}
+                className="px-6 "
+              >
+                Create
+              </Button>
+            </div>
+          </div>
+          <div className="grid gap-4">
             <Label>choose Faculty </Label>
             <FacultyDropdown
               setValue={setFacultyId}
@@ -201,29 +232,41 @@ function FacultyDropdown({
   faculties: { id: string; name: string }[] | null;
   setFaculties: Dispatch<SetStateAction<Faculty[]>>;
 }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [facultyLoading, setFacultyLoading] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(async () => {
       if (search.length >= 2 && filterdFaculties.length === 0) {
+        setFacultyLoading(true);
         const res = await fetch(
-          `/api/faculty/search?q=${encodeURIComponent(search)}`
+          `/api/faculty/search?q=${encodeURIComponent(search)}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
+        console.log("Searched res: ", res);
         const data = await res.json();
 
-        if (data.faculties) {
-          setFaculties(data.faculties);
+        console.log("Searched res: ", data);
+        if (data.faculty) {
+          console.log("found the name: ", data.faculty.name);
+          setFaculties([data.faculty]);
+          setFacultyLoading(false);
         }
       }
       return () => clearTimeout(timeout);
     }, 500);
   }, [search]);
 
-  if (!faculties || faculties.length === 0) {
+  if (!faculties || (faculties.length === 0 && !facultyLoading)) {
     return (
       <Button variant="outline" disabled className="w-full md:w-[200px]">
-        No faculties available
+        No faculties Found
       </Button>
     );
   }
@@ -239,11 +282,15 @@ function FacultyDropdown({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full md:w-[200px] justify-between"
+          className="w-full md:w-[200px] justify-between "
         >
-          {value
-            ? faculties.find((faculty) => faculty.id === value)?.name
-            : "Select faculty..."}
+          {value ? (
+            <div className="overflow-x-hidden">
+              {faculties.find((faculty) => faculty.id === value)?.name}
+            </div>
+          ) : (
+            "Select faculty..."
+          )}
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -256,7 +303,15 @@ function FacultyDropdown({
             onChange={(e) => setSearch(e.target.value)}
           />
           <CommandList>
-            <CommandEmpty>No faculty found.</CommandEmpty>
+            {facultyLoading ? (
+              <>
+                <CommandEmpty className="flex justify-center py-2">
+                  <Spinner />
+                </CommandEmpty>
+              </>
+            ) : (
+              <CommandEmpty>No faculty found.</CommandEmpty>
+            )}
             <CommandGroup>
               {filterdFaculties.map((faculty) => (
                 <CommandItem
