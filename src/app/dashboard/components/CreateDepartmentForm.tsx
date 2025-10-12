@@ -97,6 +97,14 @@ const CreateDepartmentForm = () => {
 
     const result = await res.json();
     console.log("Server response: ", result);
+
+    ///empty the input
+    setDepartmentName("");
+    setShortName("");
+    setAvailableYears("");
+    setNewFaculty("");
+    setFacultyId("");
+    setIconFile(null);
   }
 
   async function handleCreateFaculty() {
@@ -114,6 +122,18 @@ const CreateDepartmentForm = () => {
       if (res.ok) {
         toast.success(`Faculty "${newFaculty}" created`);
         const data = await res.json();
+
+        //for drop down select after the new faculty get created
+        const newFac: Faculty = {
+          id: data.facultyId,
+          name: newFaculty.trim(),
+        };
+
+        //  Add to dropdown list
+        setFaculties((prev) => [...prev, newFac]);
+
+        // Select it
+        setFacultyId(newFac.id);
         setFacultyId(data.facultyId);
       } else {
         toast.error("Failed to create faculty");
