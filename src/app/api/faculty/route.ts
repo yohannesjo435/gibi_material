@@ -1,7 +1,8 @@
 import { getAll } from "@/lib/actions/faculty/getAll";
+import { NextResponse } from "next/server";
 
 export async function GET() {
- const allFaculty = await getAll()
+  const allFaculty = await getAll();
 
- return Response.json({faculties: allFaculty})
+  return NextResponse.json({ faculties: allFaculty });
 }

@@ -1,5 +1,5 @@
 import { searchDepartment } from "@/lib/actions/departments/searchDepartment";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -7,8 +7,11 @@ export async function GET(request: NextRequest) {
   const query = searchParams.get("q") ?? "";
 
   const data = await searchDepartment(query);
-  return new Response(JSON.stringify({ department: data }), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+  return (
+    NextResponse.json({ department: data }),
+    {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 }
