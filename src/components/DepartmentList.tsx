@@ -133,7 +133,7 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
                 >
                   <CardHeader className="flex items-center gap-3.5">
                     <Image
-                      src={"/department_icons/is.png"}
+                      src={"/is.png"}
                       width={25}
                       height={25}
                       alt="course Icons"

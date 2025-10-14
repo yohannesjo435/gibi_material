@@ -34,8 +34,18 @@ interface CourseType {
   file_size_bytes: number;
   file_url: string;
   file_key: string;
+  file_type: string;
   uploaded_at: string;
   original_filename: string;
+  year: string;
+}
+
+interface Department {
+  available_years: Array<string>;
+  faculty_id: string;
+  icon_url: string;
+  name: string;
+  short_name: string;
 }
 
 const MaterialList = ({ departmentId }: { departmentId: string }) => {
@@ -43,10 +53,16 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
   const [loading, setLoading] = useState(true);
   const [downloadingFileKey, setDownloadingFileKey] = useState("");
 
+  const [selectedYear, setSelectedYear] = useState([]);
+  const [department, setDepartment] = useState<Department | null>(null);
+
+  const [activeYear, setActiveYear] = useState<string | null>("");
+  const [activeFileType, setActiveFileType] = useState<string | null>("");
   useEffect(() => {
     async function fetchCourses() {
       try {
-        const res = await fetch(`/api/departments/${departmentId}`);
+        //for getting courses
+        const res = await fetch(`/api/departments/${departmentId}/course`);
         if (!res) throw new Error("Failed to fetch Courses. ");
         const data = await res.json();
         setCourse(data);
@@ -65,6 +81,22 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
     }
   }, [courses]);
 
+  useEffect(() => {
+    async function GetDepartment() {
+      const res = await fetch(`/api/departments/${departmentId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) throw new Error("Failed to fetch Course");
+      const data = await res.json();
+      setDepartment(data.department);
+      setSelectedYear(data.department.available_years);
+      console.log("dep: ", data.department);
+    }
+    GetDepartment();
+  }, [departmentId]);
   function byteToMb(byte: number) {
     return (byte / 1000000).toFixed(1);
   }
@@ -101,15 +133,32 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
     }
   }
 
+  const filteredCourses = courses.filter((course: CourseType) => {
+    const matchesYear = activeYear ? course.year === activeYear : true;
+
+    const matchesType = activeFileType
+      ? course.file_type === activeFileType
+      : true;
+
+    return matchesYear && matchesType;
+  });
+
   return (
     <div className="flex flex-col lg:flex-row gap-10">
-      <FilterMaterial />
-
+      <FilterMaterial
+        selectedYear={selectedYear}
+        activeYear={activeYear}
+        onYearSelect={(year) =>
+          setActiveYear((prev) => (prev === year ? null : year))
+        }
+        onFileTypeSelect={(type) =>
+          setActiveFileType((prev) => (prev === type ? null : type))
+        }
+        activeFileType={activeFileType}
+      />
       <div className="w-full grid gap-3 outline-1 p-5 rounded-[10px]">
         <div className="flex justify-between items-center max-h-20">
-          <h2 className="font-semibold">
-            Year 4 - Computer Science Materials**
-          </h2>
+          <h2 className="font-semibold">{department && department.name}</h2>
           <div className="flex flex-row items-center gap-3">
             <p className="hidden md:block">{courses?.length} material found</p>
             <Select>
@@ -141,14 +190,14 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
                   Nothing Found
                 </h1>
               )}
-              {courses.map((dep: CourseType, index) => (
+              {filteredCourses.map((dep: CourseType, index) => (
                 <Card
                   key={index}
                   className="cursor-pointer max-h-32 w-[100%] grid grid-cols-1 bg-red md:grid-cols-2"
                 >
                   <CardHeader className="flex flex-row-reverse justify-between md:justify-start md:flex-row md:items-center md:gap-3.5">
                     <Image
-                      src={"/department_icons/is.png"}
+                      src={"/is.png"}
                       width={30}
                       height={30}
                       alt="course Icons"

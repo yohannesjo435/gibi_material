@@ -32,6 +32,7 @@ const UploadCourseForm = () => {
   const [title, setTitle] = useState("");
   const [tagsState, setTags] = useState("");
   const [descriptionState, setDescription] = useState("");
+  const [year, setYear] = useState("");
 
   async function handleUpload(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -60,15 +61,26 @@ const UploadCourseForm = () => {
         file_url: url,
         file_key: key,
         original_filename: file.name,
+        year: "year " + year,
       });
       if (error) throw error;
       setUrl(url);
       setUploadSucess(true);
+      if (uploadSucess) {
+        toast.success("The file has been uploaded");
+      }
     } catch (err) {
       console.error("Upload failed: ", err);
       setIsUploading(false);
     }
     setIsUploading(false);
+
+    //reset inputs
+    setTitle("");
+    setTags("");
+    setDescription("");
+    setYear("");
+    setFileType("");
   }
   return (
     <form className="grid" onSubmit={handleUpload}>
@@ -108,7 +120,7 @@ const UploadCourseForm = () => {
           />
         </div>
 
-        <div className="grid gap-4">
+        <div className="grid gap-4 my-5">
           <Label>Short Description</Label>
           <Textarea
             name="description"
@@ -117,23 +129,40 @@ const UploadCourseForm = () => {
           />
         </div>
 
-        <div className="grid gap-4 my-10 ">
-          <Label>File Type</Label>
-          <Select onValueChange={setFileType} required>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="pdf, ppt, docs " />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>File Type</SelectLabel>
-                <SelectItem value="pdf">PDF</SelectItem>
-                <SelectItem value="ppt">PPT</SelectItem>
-                <SelectItem value="docs">docs</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+        <div className="flex my-5 gap-4">
+          <div className="grid gap-1">
+            <Label>File Type</Label>
+            <Select onValueChange={setFileType} required>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="pdf, ppt, docs " />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>File Type</SelectLabel>
+                  <SelectItem value="pdf">PDF</SelectItem>
+                  <SelectItem value="ppt">PPT</SelectItem>
+                  <SelectItem value="docs">docs</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="grid gap-1">
+            <Label>
+              year{" "}
+              <span className="text-red-500 text-[13px]">
+                (Choose the year for this course)*
+              </span>
+            </Label>
+            <Input
+              type="number"
+              placeholder="0"
+              value={year.toString()}
+              onChange={(e) => setYear(e.target.value)}
+            />
+          </div>
         </div>
-        {uploadSucess && toast.success("The file has been uploaded")}
+
         <Button
           className="py-5 bg-blue-500 cursor-pointer"
           disabled={isUploading}

@@ -1,6 +1,15 @@
-import { getByDepartment } from "@/lib/actions/courses/getByDepartment"
+import { getDepartmentById } from "@/lib/actions/departments/getDepartmentById";
 
-export async function GET(request: Request, {params}: {params: {id: string}}  ) {
-  const courses = await getByDepartment(params.id)
-  return Response.json(courses)
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = await params;
+  const data = await getDepartmentById(id);
+
+  if (!data) {
+    return new Response(JSON.stringify({ sucess: false }), { status: 500 });
+  }
+
+  return Response.json({ sucess: true, department: data[0] });
 }
