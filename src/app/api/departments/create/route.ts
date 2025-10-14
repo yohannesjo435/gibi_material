@@ -6,8 +6,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     await Create(body);
 
-    return (
-      NextResponse.json({ success: true }),
+    return NextResponse.json(
+      { success: true },
       {
         status: 201,
       }
