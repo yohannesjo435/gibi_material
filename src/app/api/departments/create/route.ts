@@ -1,6 +1,7 @@
 import { Create } from "@/lib/actions/departments/create";
+import { NextRequest } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     await Create(body);

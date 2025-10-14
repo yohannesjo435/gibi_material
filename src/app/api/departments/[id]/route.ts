@@ -1,7 +1,8 @@
 import { getDepartmentById } from "@/lib/actions/departments/getDepartmentById";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const { id } = await params;
@@ -11,5 +12,5 @@ export async function GET(
     return new Response(JSON.stringify({ sucess: false }), { status: 500 });
   }
 
-  return Response.json({ sucess: true, department: data[0] });
+  return NextResponse.json({ sucess: true, department: data[0] });
 }
