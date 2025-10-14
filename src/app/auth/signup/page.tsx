@@ -11,15 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Link from "next/link";
 import {
   Command,
@@ -37,13 +28,7 @@ import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 
 import { cn } from "@/lib/utils";
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 interface Department {
   id: string;
   name: string;
