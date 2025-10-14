@@ -4,9 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 //for geting course by deparment
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = params;
+  const { id } = await context.params;
   const courses = await getByDepartment(id);
   return NextResponse.json(courses);
 }
