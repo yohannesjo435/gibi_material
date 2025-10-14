@@ -7,11 +7,10 @@ export async function GET(request: NextRequest) {
   const query = searchParams.get("q") ?? "";
 
   const data = await searchDepartment(query);
-  return (
-    NextResponse.json({ department: data }),
+  return NextResponse.json(
+    { department: data },
     {
       status: 200,
-      headers: { "Content-Type": "application/json" },
     }
   );
 }
