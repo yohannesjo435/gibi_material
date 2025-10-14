@@ -54,5 +54,5 @@ export function SkeletonCourseCard() {
   return <Skeleton className="h-[130px] w-[250px]" />;
 }
 export function SkeletonDepCard() {
-  return <Skeleton className="h-[130px] w-[250px]" />;
+  return <Skeleton className="h-[130px]" />;
 }

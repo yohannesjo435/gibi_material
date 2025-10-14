@@ -1,6 +1,5 @@
 "use client";
 import CourseBreadcrump from "./CourseBreadcrump";
-import DepartmentSelector from "./DepartmentSelector";
 import DepartmentList from "./DepartmentList";
 import MaterialList from "./MaterialList";
 import { useState } from "react";
@@ -23,11 +22,12 @@ const CourseSection = () => {
         />
         {!selectedDepartmentId && (
           <>
-            <DepartmentSelector />
             <DepartmentList onSelect={setSelectedDepartmentId} />
           </>
         )}
-        {selectedDepartmentId && <MaterialList />}
+        {selectedDepartmentId && (
+          <MaterialList departmentId={selectedDepartmentId} />
+        )}
       </div>
     </>
   );

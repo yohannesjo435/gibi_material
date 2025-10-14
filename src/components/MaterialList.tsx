@@ -1,7 +1,7 @@
+"use client";
 import {
   Card,
   CardAction,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -20,18 +20,147 @@ import { FilterMaterial } from "./FilterMaterial";
 
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { Eye, Grid2x2, List, HardDriveDownload } from "lucide-react";
+import { Eye, HardDriveDownload } from "lucide-react";
+import { useEffect } from "react";
+import { useState } from "react";
+import { SkeletonDepCard } from "./shared/AppSkeleton";
+import { toast } from "sonner";
 
-const MaterialList = () => {
+interface CourseType {
+  title: string;
+  author: string;
+  short_name: string;
+  department_id: string;
+  file_size_bytes: number;
+  file_url: string;
+  file_key: string;
+  file_type: string;
+  uploaded_at: string;
+  original_filename: string;
+  year: string;
+}
+
+interface Department {
+  available_years: Array<string>;
+  faculty_id: string;
+  icon_url: string;
+  name: string;
+  short_name: string;
+}
+
+const MaterialList = ({ departmentId }: { departmentId: string }) => {
+  const [courses, setCourse] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [downloadingFileKey, setDownloadingFileKey] = useState("");
+
+  const [selectedYear, setSelectedYear] = useState([]);
+  const [department, setDepartment] = useState<Department | null>(null);
+
+  const [activeYear, setActiveYear] = useState<string | null>("");
+  const [activeFileType, setActiveFileType] = useState<string | null>("");
+  useEffect(() => {
+    async function fetchCourses() {
+      try {
+        //for getting courses
+        const res = await fetch(`/api/departments/${departmentId}/course`);
+        if (!res) throw new Error("Failed to fetch Courses. ");
+        const data = await res.json();
+        setCourse(data);
+      } catch (err) {
+        console.error("Fetch error", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchCourses();
+  }, [departmentId]);
+
+  useEffect(() => {
+    if (courses.length > 0) {
+      console.log("courses: ", courses);
+    }
+  }, [courses]);
+
+  useEffect(() => {
+    async function GetDepartment() {
+      const res = await fetch(`/api/departments/${departmentId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) throw new Error("Failed to fetch Course");
+      const data = await res.json();
+      setDepartment(data.department);
+      setSelectedYear(data.department.available_years);
+      console.log("dep: ", data.department);
+    }
+    GetDepartment();
+  }, [departmentId]);
+  function byteToMb(byte: number) {
+    return (byte / 1000000).toFixed(1);
+  }
+
+  function formatDate(raw: string) {
+    const date = new Date(raw);
+    return new Intl.DateTimeFormat("en-US", {
+      dateStyle: "short",
+      // timeStyle: "short",
+    }).format(date);
+  }
+
+  async function handleDownload(
+    url: string,
+    filename: string,
+    file_key: string
+  ) {
+    try {
+      setDownloadingFileKey(file_key);
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      toast.success(`success fully downloaded ${filename}`);
+    } catch (err) {
+      console.error("Failed to download: ", err);
+    } finally {
+      setDownloadingFileKey("");
+    }
+  }
+
+  const filteredCourses = courses.filter((course: CourseType) => {
+    const matchesYear = activeYear ? course.year === activeYear : true;
+
+    const matchesType = activeFileType
+      ? course.file_type === activeFileType
+      : true;
+
+    return matchesYear && matchesType;
+  });
+
   return (
     <div className="flex flex-col lg:flex-row gap-10">
-      <FilterMaterial />
-
+      <FilterMaterial
+        selectedYear={selectedYear}
+        activeYear={activeYear}
+        onYearSelect={(year) =>
+          setActiveYear((prev) => (prev === year ? null : year))
+        }
+        onFileTypeSelect={(type) =>
+          setActiveFileType((prev) => (prev === type ? null : type))
+        }
+        activeFileType={activeFileType}
+      />
       <div className="w-full grid gap-3 outline-1 p-5 rounded-[10px]">
-        <div className="flex justify-between items-center ">
-          <h2 className="font-semibold">Year 4 - Computer Science Materials</h2>
+        <div className="flex justify-between items-center max-h-20">
+          <h2 className="font-semibold">{department && department.name}</h2>
           <div className="flex flex-row items-center gap-3">
-            <p className="hidden md:block">24 material found</p>
+            <p className="hidden md:block">{courses?.length} material found</p>
             <Select>
               <SelectTrigger>
                 <SelectValue placeholder="Sort by Date" />
@@ -44,99 +173,87 @@ const MaterialList = () => {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <Grid2x2 className="hidden md:block" size={18} />
-            <List className="hidden md:block" size={18} />
           </div>
         </div>
-        {course.map((dep, index) => (
-          <Card
-            key={index}
-            className="cursor-pointer grid grid-cols-1 md:grid-cols-2"
-          >
-            <CardHeader className="flex flex-row-reverse justify-between md:justify-start md:flex-row md:items-center md:gap-3.5">
-              <Image
-                src={"/department_icons/is.png"}
-                width={30}
-                height={30}
-                alt="course Icons"
-              />
-              <div className="grid gap-1">
-                <CardTitle>{dep.name}</CardTitle>
-                <div className="flex gap-2">
-                  <CardDescription>{dep.nickName}</CardDescription>
-                  <CardDescription>{dep.author}</CardDescription>
-                  <CardDescription className="font-medium">
-                    {dep.size}mb
-                  </CardDescription>
-                  <CardDescription>{dep.updatedDate}</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardFooter className="flex justify-end">
-              <CardAction className="w-full flex justify-end gap-2">
-                <Button
-                  variant={"outline"}
-                  className="w-[90%] md:w-max bg-blue-500  md:bg-gray-200"
+
+        <div className="space-y-4 h-max">
+          {loading ? (
+            <>
+              {Array.from({ length: 2 }, (_, index) => (
+                <SkeletonDepCard key={index} />
+              ))}
+            </>
+          ) : (
+            <>
+              {courses.length === 0 && (
+                <h1 className="text-3xl md:text-6xl text-center text-red-500">
+                  Nothing Found
+                </h1>
+              )}
+              {filteredCourses.map((dep: CourseType, index) => (
+                <Card
+                  key={index}
+                  className="cursor-pointer max-h-32 w-[100%] grid grid-cols-1 bg-red md:grid-cols-2"
                 >
-                  <Eye />
-                  Preview
-                </Button>
-                <Button className="hidden md:block bg-blue-500 cursor-pointer">
-                  Download
-                </Button>
-                <Button className="w-[10%] md:hidden cursor-pointer ">
-                  <HardDriveDownload />
-                </Button>
-              </CardAction>
-            </CardFooter>
-          </Card>
-        ))}
+                  <CardHeader className="flex flex-row-reverse justify-between md:justify-start md:flex-row md:items-center md:gap-3.5">
+                    <Image
+                      src={"/is.png"}
+                      width={30}
+                      height={30}
+                      alt="course Icons"
+                    />
+                    <div className="grid gap-1">
+                      <CardTitle>{dep.title}</CardTitle>
+                      <div className="flex gap-2">
+                        <CardDescription>{dep.short_name}</CardDescription>
+                        <CardDescription>{dep.author}</CardDescription>
+                        <CardDescription className="font-medium">
+                          {byteToMb(dep.file_size_bytes)} mb
+                        </CardDescription>
+                        <CardDescription>
+                          {formatDate(dep.uploaded_at)}
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardFooter className="flex justify-end">
+                    <CardAction className="w-full flex justify-end gap-2 md:max-w-max">
+                      <a href={dep.file_url} className="w-full">
+                        <Button
+                          className="w-[100%] md:w-max bg-blue-500 md:bg-gray-200"
+                          variant={"outline"}
+                        >
+                          <Eye />
+                          Preview
+                        </Button>
+                      </a>
+                      <Button
+                        onClick={() =>
+                          handleDownload(
+                            dep.file_url,
+                            dep.original_filename,
+                            dep.file_key
+                          )
+                        }
+                        disabled={downloadingFileKey === dep.file_key}
+                        className="hidden md:block bg-blue-500 cursor-pointer"
+                      >
+                        Download
+                      </Button>
+
+                      <Button className="w-[10%] md:hidden cursor-pointer ">
+                        <HardDriveDownload />
+                      </Button>
+                    </CardAction>
+                  </CardFooter>
+                </Card>
+              ))}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
 export default MaterialList;
-
-const course = [
-  {
-    name: "C++",
-    nickName: "CS",
-    author: "Prof Yohannes",
-    couseCode: "cs-1011",
-    updatedDate: 4,
-    size: " 2.4",
-  },
-  {
-    name: "Networking",
-    nickName: "IS",
-    author: "Prof Yohannes",
-    couseCode: "is-451",
-    updatedDate: 4,
-    size: " 2.4",
-  },
-  {
-    name: "Dsa",
-    nickName: "Med",
-    author: "Prof Yohannes",
-    couseCode: "med-101",
-    updatedDate: 4,
-    size: " 2.4",
-  },
-  {
-    name: "Numerical Analysis",
-    nickName: "Pharma",
-    author: "Prof Yohannes",
-    couseCode: "pharma-11",
-    updatedDate: 4,
-    size: " 2.4",
-  },
-  {
-    name: "Operating System",
-    nickName: "CS",
-    author: "Prof Yohannes",
-    couseCode: "cs-1011",
-    updatedDate: 4,
-    size: " 2.4",
-  },
-];

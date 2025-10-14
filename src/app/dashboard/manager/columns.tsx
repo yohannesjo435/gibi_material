@@ -19,7 +19,7 @@ import {
 export type Course = {
   id: string;
   courseName: string;
-  fileType: "pdf" | "ppt" | " docs" | "epub";
+  fileType: "pdf" | "ppt" | " docs";
   uploadDate: string;
   courseCode: string;
 };
@@ -63,7 +63,6 @@ export const columns: ColumnDef<Course>[] = [
     id: "actions",
     cell: ({ row }) => {
       const course = row.original;
-      console.log("row: ", row);
 
       return (
         <DropdownMenu>

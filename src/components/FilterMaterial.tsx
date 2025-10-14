@@ -1,3 +1,4 @@
+"use client";
 import {
   Select,
   SelectContent,
@@ -11,11 +12,37 @@ import { Card } from "./ui/card";
 import { Label } from "./ui/label";
 import { Badge } from "./ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useEffect, useState } from "react";
 
-export const FilterMaterial = () => {
+interface CourseType {
+  title: string;
+  author: string;
+  short_name: string;
+  department_id: string;
+  file_size_bytes: number;
+  file_url: string;
+  file_key: string;
+  uploaded_at: string;
+  original_filename: string;
+  year: string;
+}
+
+export const FilterMaterial = ({
+  selectedYear,
+  activeYear,
+  activeFileType,
+  onYearSelect,
+  onFileTypeSelect,
+}: {
+  selectedYear: Array<string>;
+  onYearSelect: (year: string) => void;
+  onFileTypeSelect: (type: string | null) => void;
+  activeYear: string | null;
+  activeFileType: string | null;
+}) => {
   return (
     <div className="outline-1 min-w-2xs p-5 py-10 flex flex-col gap-3 md:gap-5 rounded-[10px] shadow-2xs">
-      <Label>Department</Label>
+      <Label>Department****</Label>
       <Select>
         <SelectTrigger className="w-full md:w-[180px]">
           <SelectValue placeholder="Select Course" />
@@ -37,44 +64,53 @@ export const FilterMaterial = () => {
 
       <Label>Acadmaic Year</Label>
       <div className="grid grid-cols-4 md:grid-cols-2 gap-3 text-center font-semibold text-[14px] cursor-pointer">
-        <Card className="p-0">
-          <button className="h-full p-6 w-full focus:bg-blue-500 focus:text-white rounded-xl">
-            Year 1
-          </button>
-        </Card>
-        <Card className="p-0">
-          <button className="h-full p-6 w-full focus:bg-blue-500 focus:text-white rounded-xl">
-            Year 2
-          </button>
-        </Card>
-        <Card className="p-0">
-          <button className="h-full p-6 w-full focus:bg-blue-500 focus:text-white rounded-xl">
-            Year 3
-          </button>
-        </Card>
-        <Card className="p-0">
-          <button className="h-full p-6 w-full focus:bg-blue-500 focus:text-white rounded-xl">
-            Year{" "}
-          </button>
-        </Card>
+        {selectedYear.map((year, i) => (
+          <Card key={i} className="p-0">
+            <button
+              onClick={() => onYearSelect(year)}
+              className={`h-full p-6 w-full rounded-xl
+                ${
+                  activeYear === year
+                    ? "bg-blue-500 text-white"
+                    : "bg-transparent"
+                }
+              `}
+            >
+              {year}
+            </button>
+          </Card>
+        ))}
       </div>
 
       <div className="hidden md:grid gap-5 mt-3">
         <Label>File Type</Label>
-        <RadioGroup defaultValue="pdf" className="flex">
-          <div className="flex gap-2 items-center">
-            <RadioGroupItem value="pdf" />
-            <Badge className="bg-red-100 text-red-500">PDF</Badge>
-          </div>
-          <div className="flex gap-2 items-center">
-            <RadioGroupItem value="ppt" />
-            <Badge className="bg-blue-100 text-blue-600">PPT</Badge>
-          </div>
-          <div className="flex gap-2 items-center">
-            <RadioGroupItem value="docs" />
-            <Badge className="bg-green-100 text-green-600">Docs</Badge>
-          </div>
-        </RadioGroup>
+        <div className="flex gap-2">
+          {[
+            { label: "PDF", value: "pdf", style: "bg-red-100 text-red-500" },
+            { label: "PPT", value: "ppt", style: "bg-blue-100 text-blue-600" },
+            {
+              label: "DOCS",
+              value: "docs",
+              style: "bg-green-100 text-green-600",
+            },
+          ].map((type) => (
+            <button
+              key={type.label}
+              onClick={() =>
+                onFileTypeSelect(
+                  activeFileType === type.value ? null : type.value
+                )
+              }
+              className={`px-3 py-1 rounded-[5px] ${
+                activeFileType === type.value
+                  ? `${type.style} border-transparent`
+                  : "outline-1 text-white font-semiboldbold"
+              }`}
+            >
+              {type.value}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

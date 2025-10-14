@@ -6,6 +6,7 @@ import { userColumns, User } from "./userColumns";
 
 import { UserDataTable } from "./users-data-table";
 import { DataTable } from "../components/data-table";
+import CreateDepartmentForm from "../components/CreateDepartmentForm";
 
 async function getData(): Promise<Course[]> {
   // Fetch data from your API here.
@@ -223,12 +224,15 @@ async function page() {
         <Suspense fallback={<SkeletonUploadCourseForm />}>
           <UploadCourseForm />
         </Suspense>
+
+        <CreateDepartmentForm />
+      </div>
+
+      <div className="mx-[2%]">
         <h1 className="text-4xl mt-14 mb-2">All Live Materials</h1>
         <h4 className="mb-7 text-gray-500 text-[13px]">
           View and manage all uploaded materials.
         </h4>
-      </div>
-      <div className="mx-[2%]">
         <DataTable columns={columns} data={MaterialData} />
       </div>
     </div>
