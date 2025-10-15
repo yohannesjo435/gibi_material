@@ -85,7 +85,7 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
   //get Current Department
   const indexOfLastDep = currentPage * departmentPerPage;
   const indexOfFirstDep = indexOfLastDep - departmentPerPage;
-  const currentDepartment = departments.slice(indexOfFirstDep, indexOfLastDep);
+  const currentDepartment = departments?.slice(indexOfFirstDep, indexOfLastDep);
 
   //change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);

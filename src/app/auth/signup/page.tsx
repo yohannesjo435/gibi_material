@@ -29,6 +29,9 @@ import { Spinner } from "@/components/ui/spinner";
 
 import { cn } from "@/lib/utils";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { formatPhone, phoneToEmail } from "@/lib/phone";
 interface Department {
   id: string;
   name: string;
@@ -42,6 +45,13 @@ function Page() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setloading] = useState(true);
   const [departmentId, setDepartmentId] = useState("");
+
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+
+  // const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
 
   const FetchAllDepartments = () => {
     useEffect(() => {
@@ -62,6 +72,51 @@ function Page() {
     }, []);
   };
   FetchAllDepartments();
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setloading(true);
+
+    const normalizedPhone = formatPhone(phone);
+
+    if (!normalizedPhone) {
+      toast.error("Please enter a valid Ethiopian phone number");
+      setloading(false);
+      return;
+    }
+
+    const email = phoneToEmail(normalizedPhone);
+
+    const res = await fetch("/api/auth/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fullName,
+        phone: normalizedPhone,
+        email: email,
+        password,
+        departmentId,
+      }),
+    });
+
+    const { error } = await res.json();
+    setloading(false);
+
+    if (error) {
+      toast.error(error);
+    } else {
+      toast.success("Signup successful! Awaiting approval.");
+      router.push("/auth/login");
+    }
+
+    //reset input field
+    setFullName("");
+    setPhone("");
+    setDepartmentId("");
+    setPassword("");
+  }
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-[80vh] w-[90%] m-auto md:mt-10">
       <div className="hidden md:block bg-[url('/graduats.webp')] bg-no-repeat bg-cover w-full rounded-[15px]"></div>
@@ -75,24 +130,33 @@ function Page() {
             </CardAction>
           </CardHeader>
           <CardContent>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
                   <Label htmlFor="email">Full name</Label>
                   <Input
                     id="full-name"
+                    name="full-name"
                     type="text"
                     placeholder="abebe teshome"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
                     required
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Phone Number</Label>
+                  <Label htmlFor="">
+                    Phone Number{" "}
+                    <span className="text-red-500">(start with 09)</span>
+                  </Label>
                   <Input
                     id="phone_number"
+                    name="phone-number"
                     type="text"
                     placeholder="0901020304"
                     required
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -118,19 +182,23 @@ function Page() {
                       Forgot your password?
                     </Link>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
                 </div>
+              </div>
+              <div className="mt-5">
+                <Button type="submit" className="w-full" disabled={loading}>
+                  Signup
+                </Button>
               </div>
             </form>
           </CardContent>
-          <CardFooter className="flex-col gap-2">
-            <Button type="submit" className="w-full">
-              Signup
-            </Button>
-            <Button variant="outline" className="w-full">
-              Signup with Google
-            </Button>
-          </CardFooter>
         </Card>
       </div>
     </div>
@@ -169,7 +237,7 @@ function DepartmentDropdown({
         );
         const data = await res.json();
 
-        if (data.department) {
+        if (data.department && data.department?.length) {
           setDepartments([data.department[0]]);
           setLoading(false);
         }
@@ -186,7 +254,7 @@ function DepartmentDropdown({
     );
   }
 
-  const filterdDepartments = departments.filter((f) =>
+  const filterdDepartments = (departments ?? []).filter((f) =>
     f.name.toLowerCase().includes(search.toLowerCase())
   );
 
