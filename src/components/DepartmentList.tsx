@@ -47,9 +47,16 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
           query.trim().toLowerCase()
         )}`
       );
-      const json = await res.json();
-      setResults(json.department);
-      console.log("results: ", results);
+      if (!res.ok) {
+        console.error("Search request failed", res.status, res.statusText);
+        setResults([]);
+      } else {
+        const json = await res.json();
+        // API may return { departments: [...] } or { department: [...] } or raw array
+        const list = json?.departments ?? json?.department ?? json ?? [];
+        setResults(list);
+        console.log("results: ", list);
+      }
     } catch {
     } finally {
       setloading(false);
@@ -85,7 +92,7 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
   //get Current Department
   const indexOfLastDep = currentPage * departmentPerPage;
   const indexOfFirstDep = indexOfLastDep - departmentPerPage;
-  const currentDepartment = departments.slice(indexOfFirstDep, indexOfLastDep);
+  const currentDepartment = departments?.slice(indexOfFirstDep, indexOfLastDep);
 
   //change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);

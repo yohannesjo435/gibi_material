@@ -10,22 +10,6 @@ import {
 } from "@/components/ui/select";
 import { Card } from "./ui/card";
 import { Label } from "./ui/label";
-import { Badge } from "./ui/badge";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useEffect, useState } from "react";
-
-interface CourseType {
-  title: string;
-  author: string;
-  short_name: string;
-  department_id: string;
-  file_size_bytes: number;
-  file_url: string;
-  file_key: string;
-  uploaded_at: string;
-  original_filename: string;
-  year: string;
-}
 
 export const FilterMaterial = ({
   selectedYear,
@@ -42,7 +26,9 @@ export const FilterMaterial = ({
 }) => {
   return (
     <div className="outline-1 min-w-2xs p-5 py-10 flex flex-col gap-3 md:gap-5 rounded-[10px] shadow-2xs">
-      <Label>Department****</Label>
+      <Label className="text-red-400">
+        replace with search for courses ****
+      </Label>
       <Select>
         <SelectTrigger className="w-full md:w-[180px]">
           <SelectValue placeholder="Select Course" />

@@ -26,7 +26,7 @@ export type Course = {
 
 export const columns: ColumnDef<Course>[] = [
   {
-    accessorKey: "courseName",
+    accessorKey: "title",
     header: ({ column }) => {
       return (
         <Button
@@ -41,11 +41,11 @@ export const columns: ColumnDef<Course>[] = [
     },
   },
   {
-    accessorKey: "fileType",
+    accessorKey: "file_type",
     header: "File Type",
   },
   {
-    accessorKey: "uploadDate",
+    accessorKey: "uploaded_at",
     header: ({ column }) => {
       return (
         <Button

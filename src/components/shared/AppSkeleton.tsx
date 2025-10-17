@@ -56,3 +56,7 @@ export function SkeletonCourseCard() {
 export function SkeletonDepCard() {
   return <Skeleton className="h-[130px]" />;
 }
+
+export function SkeletonHeader() {
+  return <Skeleton className="h-[100px] w-full" />;
+}
