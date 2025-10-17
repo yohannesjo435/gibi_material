@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import { formatPhone, phoneToEmail } from "@/lib/phone";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
@@ -22,6 +23,7 @@ function Loginpage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { loading: authLoading } = useAuthRedirect();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -44,16 +46,19 @@ function Loginpage() {
     if (error) {
       toast.error(error.message);
     } else {
-      router.push("/dashboard/faculty");
+      router.push("/dashboard");
     }
   }
   return (
-    <div className="grid h-[80vh] w-[90%] max-w-[600px] m-auto md:mt-10 ">
-      <h1 className="text-4xl -mb-5 text-center">Welcome Back</h1>
-      <h4 className=" text-gray-500 text-[13px] text-center">
-        login and manage the Courses
-      </h4>
-      <div className="w-[80%] m-auto">
+    <div className="grid h-[80vh] w-[90%] max-w-[600px] m-auto md:mt-4">
+      <div className="my-10">
+        <h1 className="text-5xl h-max text-center mb-3">Welcome Back</h1>
+        <h4 className=" text-gray-500 text-[13px] text-center">
+          login and manage the Courses
+        </h4>
+      </div>
+
+      <div className="w-[80%] mx-auto">
         <Card>
           <CardHeader>
             <CardTitle>Login to your Account</CardTitle>

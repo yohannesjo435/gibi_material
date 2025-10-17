@@ -5,7 +5,6 @@ import {
   CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -59,6 +58,10 @@ function Page() {
         try {
           const res = await fetch("/api/departments");
           if (!res) throw new Error("Failed to fetch Departments. ");
+          if (!res.ok) {
+            console.log("fialed to fetch Department");
+            return;
+          }
           const data = await res.json();
           setDepartments(data);
         } catch (err) {

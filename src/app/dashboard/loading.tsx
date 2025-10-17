@@ -1,5 +1,11 @@
+import { LoaderCircle } from "lucide-react";
+
 function Loading() {
-  return <div>loading ...</div>;
+  return (
+    <div className="fixed inset-0 bg-white dark:bg-[#030619] flex justify-center items-center h-full ">
+      <LoaderCircle className="animate-spin w-8 h-8" />
+    </div>
+  );
 }
 
 export default Loading;
