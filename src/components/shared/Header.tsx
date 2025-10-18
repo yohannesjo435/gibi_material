@@ -144,29 +144,31 @@ function Header() {
           <Button variant="outline">Sign Up</Button>
         </Link>
         <ModeToggle />
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            {" "}
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>A</AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>
-              {user?.user_metadata.fullName}
-            </DropdownMenuLabel>
-            <DropdownMenuItem asChild>
-              <Link href={"/dashboard"}>Dashboard</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>Contact manager</DropdownMenuItem>
-            <DropdownMenuItem onClick={signOut} variant="destructive">
-              Logout
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {user && (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              {" "}
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>A</AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>
+                {user?.user_metadata.fullName}
+              </DropdownMenuLabel>
+              <DropdownMenuItem asChild>
+                <Link href={"/dashboard"}>Dashboard</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>Contact manager</DropdownMenuItem>
+              <DropdownMenuItem onClick={signOut} variant="destructive">
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
     </header>
   );

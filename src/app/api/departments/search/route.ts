@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
   const data = await searchDepartment(query);
   return NextResponse.json(
-    { departments: data },
+    { department: data },
     {
       status: 200,
     }

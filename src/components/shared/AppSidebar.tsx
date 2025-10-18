@@ -115,13 +115,15 @@ const AppSidebar = () => {
               </Link>
             </div>
           )}
-          <div className="flex gap-2 items-center justify-center">
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>Admin</AvatarFallback>
-            </Avatar>
-            <p className="mt-1">{user?.user_metadata.fullName}</p>
-          </div>
+          {user && (
+            <div className="flex gap-2 items-center justify-center">
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>Admin</AvatarFallback>
+              </Avatar>
+              <p className="mt-1">{user?.user_metadata.fullName}</p>
+            </div>
+          )}
         </SidebarFooter>
       </Sidebar>
     </div>
