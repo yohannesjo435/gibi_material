@@ -9,6 +9,7 @@ import { supabase } from "@/lib/supabaseClient";
 function FacultyAdmin() {
   const [data, setData] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
+  const [departmentId, setDepartmentId] = useState("");
 
   async function loadMaterials() {
     setLoading(false);
@@ -36,6 +37,7 @@ function FacultyAdmin() {
       return;
     }
 
+    setDepartmentId(profile.department_id);
     console.log("departmetn id: ", profile.department_id);
     const { data: materials, error: materialsError } = await supabase
       .from("study_material")
@@ -57,7 +59,7 @@ function FacultyAdmin() {
   return (
     <div className="w-[87%] m-auto my-10 ">
       <h1 className="text-4xl mb-5">Admin Panel</h1>
-      <UploadCourseForm />
+      <UploadCourseForm departmentId={departmentId} />
 
       <h1 className="text-4xl mt-14 mb-2">Manage Existing Materials</h1>
       <h4 className="mb-7 text-gray-500 text-[13px]">

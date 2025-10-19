@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { uploadFile } from "@/lib/storage";
 import { supabase } from "@/lib/supabaseClient";
 
-const UploadCourseForm = () => {
+const UploadCourseForm = ({ departmentId }: { departmentId: string }) => {
   const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState("");
 
@@ -62,6 +62,7 @@ const UploadCourseForm = () => {
         file_key: key,
         original_filename: file.name,
         year: "year " + year,
+        department_id: departmentId,
       });
       if (error) throw error;
       setUrl(url);
