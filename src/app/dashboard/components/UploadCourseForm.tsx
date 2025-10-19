@@ -19,7 +19,13 @@ import { toast } from "sonner";
 import { uploadFile } from "@/lib/storage";
 import { supabase } from "@/lib/supabaseClient";
 
-const UploadCourseForm = ({ departmentId }: { departmentId: string }) => {
+const UploadCourseForm = ({
+  departmentId,
+  onSuccess,
+}: {
+  departmentId?: string | null;
+  onSuccess?: () => void;
+}) => {
   const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState("");
 
@@ -67,14 +73,15 @@ const UploadCourseForm = ({ departmentId }: { departmentId: string }) => {
       if (error) throw error;
       setUrl(url);
       setUploadSucess(true);
-      if (uploadSucess) {
-        toast.success("The file has been uploaded");
-      }
+      toast.success("The file has been uploaded");
+
+      // notify parent to refresh materials
+      if (onSuccess) onSuccess();
     } catch (err) {
       console.error("Upload failed: ", err);
+    } finally {
       setIsUploading(false);
     }
-    setIsUploading(false);
 
     //reset inputs
     setTitle("");

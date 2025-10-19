@@ -59,7 +59,7 @@ function FacultyAdmin() {
   return (
     <div className="w-[87%] m-auto my-10 ">
       <h1 className="text-4xl mb-5">Admin Panel</h1>
-      <UploadCourseForm departmentId={departmentId} />
+      <UploadCourseForm departmentId={departmentId} onSuccess={loadMaterials} />
 
       <h1 className="text-4xl mt-14 mb-2">Manage Existing Materials</h1>
       <h4 className="mb-7 text-gray-500 text-[13px]">
