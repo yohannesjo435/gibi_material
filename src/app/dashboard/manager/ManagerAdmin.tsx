@@ -4,7 +4,7 @@ import React, { Suspense, useEffect, useState } from "react";
 import UploadCourseForm from "../components/UploadCourseForm";
 import { SkeletonUploadCourseForm } from "@/components/shared/AppSkeleton";
 import { makeColumns, Course } from "./columns";
-import { makeUserColumns, User } from "./userColumns";
+import { User, MakeUserColumns } from "./userColumns";
 import { UserDataTable } from "./users-data-table";
 import { DataTable } from "../components/data-table";
 import CreateDepartmentForm from "../components/CreateDepartmentForm";
@@ -50,7 +50,7 @@ export default function ManagerAdmin() {
         </h4>
 
         <UserDataTable
-          columns={makeUserColumns(loadUsers)}
+          columns={MakeUserColumns(loadUsers)}
           data={usersData}
           meta={{ reloadData: loadUsers }}
         />
