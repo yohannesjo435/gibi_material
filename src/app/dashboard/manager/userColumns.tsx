@@ -37,7 +37,7 @@ export type User = {
   status: "active" | "pending";
 };
 
-export const makeUserColumns = (onSucess?: () => void): ColumnDef<User>[] => [
+export const MakeUserColumns = (onSucess?: () => void): ColumnDef<User>[] => [
   {
     accessorKey: "full_name",
     header: ({ column }) => {
