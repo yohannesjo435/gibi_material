@@ -5,6 +5,7 @@ import FacultyAdmin from "./faculty/FacultyAdmin";
 import { useAuthRedirect } from "@/hooks/useAuthRedirect";
 import getUserRole from "@/hooks/getUserRole";
 import Loading from "../loading";
+import { ApproveWaiting } from "./components/ApproveWaiting";
 
 function Dashboard() {
   const { loading } = useAuthRedirect();
@@ -27,6 +28,7 @@ function Dashboard() {
   if (loading || role === null) return <Loading />;
   return (
     <>
+      {role === "pending" && <ApproveWaiting />}
       {role === "faculty" && <FacultyAdmin />}
       {role === "manager" && <ManagerAdmin />}
     </>
