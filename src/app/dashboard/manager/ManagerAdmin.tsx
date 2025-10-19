@@ -27,7 +27,7 @@ export default function ManagerAdmin() {
   const loadUsers = async () => {
     const { data, error } = await supabase
       .from("users")
-      .select("id, full_name, phone_number, role, status");
+      .select("id, full_name, phone_number, role, status, auth_id");
     if (error) {
       console.error("Failed to fetch users:", error.message);
       return;

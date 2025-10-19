@@ -131,7 +131,7 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
           </>
         ) : (
           <>
-            {(results.length > 0 ? results : currentDepartment).map(
+            {(results.length > 0 ? results : currentDepartment || []).map(
               (dep: Department, index) => (
                 <Card
                   key={index}

@@ -31,8 +31,9 @@ export type User = {
   id: string;
   full_name: string;
   phone_number: string;
-  role: "faculty" | "manager";
+  role: "faculty" | "manager" | "pending";
   status: "active" | "pending";
+  auth_id: string;
 };
 
 export const MakeUserColumns = (onSucess?: () => void): ColumnDef<User>[] => [
@@ -57,7 +58,9 @@ export const MakeUserColumns = (onSucess?: () => void): ColumnDef<User>[] => [
     cell: ({ row }) => {
       const user = row.original;
 
-      async function handleRoleChange(newRole: "faculty" | "manager") {
+      async function handleRoleChange(
+        newRole: "faculty" | "manager" | "pending"
+      ) {
         if (newRole === user.role) return;
 
         const { error } = await supabase
@@ -79,7 +82,7 @@ export const MakeUserColumns = (onSucess?: () => void): ColumnDef<User>[] => [
           <Select
             value={user.role}
             onValueChange={(val) =>
-              handleRoleChange(val as "faculty" | "manager")
+              handleRoleChange(val as "faculty" | "manager" | "pending")
             }
           >
             <SelectTrigger className="w-full">
@@ -90,6 +93,7 @@ export const MakeUserColumns = (onSucess?: () => void): ColumnDef<User>[] => [
                 <SelectLabel>user</SelectLabel>
                 <SelectItem value="faculty">Faculty</SelectItem>
                 <SelectItem value="manager">Manager</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -102,14 +106,16 @@ export const MakeUserColumns = (onSucess?: () => void): ColumnDef<User>[] => [
     cell: ({ row }) => {
       const user = row.original;
 
-      // async function handleDelete(user: user) {
-      //   if (!window.confirm("Delete this user?")) return;
+      async function handleDelete(user: User) {
+        if (!window.confirm("Delete this user?")) return;
 
-      //   const res = await fetch(`api/users/${user.id}`, { method: "DELETE" });
-      //   if (!res.ok) return toast.error("Delete failed");
-      //   toast.success("User account fully removed");
-      //   onSucess?.();
-      // }
+        const res = await fetch(`/api/users/${user.auth_id}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) return toast.error("Delete failed");
+        toast.success("User account fully removed");
+        onSucess?.();
+      }
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -128,10 +134,9 @@ export const MakeUserColumns = (onSucess?: () => void): ColumnDef<User>[] => [
               Copy Phone Number
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            {/* <DropdownMenuItem> Edit</DropdownMenuItem> */}
             <DropdownMenuItem
               className="bg-red-500 text-white rounded-[1px]"
-              // onClick={handleDelete}
+              onClick={() => handleDelete(user)}
             >
               Delete
             </DropdownMenuItem>
