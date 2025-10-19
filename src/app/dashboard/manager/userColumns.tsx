@@ -24,10 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
-import { table } from "console";
 
 export type User = {
   id: string;
@@ -56,20 +54,16 @@ export const MakeUserColumns = (onSucess?: () => void): ColumnDef<User>[] => [
   {
     accessorKey: "role",
     header: "Role",
-    cell: ({ row, table }) => {
+    cell: ({ row }) => {
       const user = row.original;
-      const [updating, setUpdating] = useState(false);
 
       async function handleRoleChange(newRole: "faculty" | "manager") {
         if (newRole === user.role) return;
-        setUpdating(true);
 
         const { error } = await supabase
           .from("users")
           .update({ role: newRole })
           .eq("id", user.id);
-
-        setUpdating(false);
 
         if (error) {
           toast.error("Failed to Update role");
@@ -87,7 +81,6 @@ export const MakeUserColumns = (onSucess?: () => void): ColumnDef<User>[] => [
             onValueChange={(val) =>
               handleRoleChange(val as "faculty" | "manager")
             }
-            disabled={updating}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder={user.role} />
