@@ -15,18 +15,29 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { supabase } from "@/lib/supabaseClient";
+import { toast } from "sonner";
 
 export type User = {
   id: string;
-  name: string;
-  email: string;
+  full_name: string;
+  phone_number: string;
   role: "faculty" | "manager";
-  status: "active" | "inactive";
+  status: "active" | "pending";
 };
 
-export const userColumns: ColumnDef<User>[] = [
+export const MakeUserColumns = (onSucess?: () => void): ColumnDef<User>[] => [
   {
-    accessorKey: "name",
+    accessorKey: "full_name",
     header: ({ column }) => {
       return (
         <Button
@@ -34,25 +45,71 @@ export const userColumns: ColumnDef<User>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="-ml-3"
         >
-          Name
+          full Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
     accessorKey: "role",
     header: "Role",
+    cell: ({ row }) => {
+      const user = row.original;
+
+      async function handleRoleChange(newRole: "faculty" | "manager") {
+        if (newRole === user.role) return;
+
+        const { error } = await supabase
+          .from("users")
+          .update({ role: newRole })
+          .eq("id", user.id);
+
+        if (error) {
+          toast.error("Failed to Update role");
+          console.error(error);
+          return;
+        }
+
+        toast.success(`Role updated to ${newRole}`);
+        onSucess?.();
+      }
+      return (
+        <div className="max-w-[100px]">
+          <Select
+            value={user.role}
+            onValueChange={(val) =>
+              handleRoleChange(val as "faculty" | "manager")
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={user.role} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>user</SelectLabel>
+                <SelectItem value="faculty">Faculty</SelectItem>
+                <SelectItem value="manager">Manager</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      );
+    },
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const course = row.original;
+      const user = row.original;
 
+      // async function handleDelete(user: user) {
+      //   if (!window.confirm("Delete this user?")) return;
+
+      //   const res = await fetch(`api/users/${user.id}`, { method: "DELETE" });
+      //   if (!res.ok) return toast.error("Delete failed");
+      //   toast.success("User account fully removed");
+      //   onSucess?.();
+      // }
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -66,14 +123,16 @@ export const userColumns: ColumnDef<User>[] = [
               Actions
             </DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(course.email)}
+              onClick={() => navigator.clipboard.writeText(user.phone_number)}
             >
-              Copy email
+              Copy Phone Number
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem> Edit</DropdownMenuItem>
-            <DropdownMenuItem className="bg-red-500 text-white rounded-[1px]">
-              {" "}
+            {/* <DropdownMenuItem> Edit</DropdownMenuItem> */}
+            <DropdownMenuItem
+              className="bg-red-500 text-white rounded-[1px]"
+              // onClick={handleDelete}
+            >
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

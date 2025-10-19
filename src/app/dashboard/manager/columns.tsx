@@ -15,18 +15,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import EditCourseForm from "../components/EditCourseForm";
+import { supabase } from "@/lib/supabaseClient";
+import { toast } from "sonner";
 
 export type Course = {
   id: string;
-  courseName: string;
-  fileType: "pdf" | "ppt" | " docs";
-  uploadDate: string;
-  courseCode: string;
+  title: string;
+  file_type: "pdf" | "ppt" | "docs";
+  uploaded_at: string;
+  course_code: string;
+  file_url: string;
 };
 
-export const columns: ColumnDef<Course>[] = [
+export const makeColumns = (onSuccess?: () => void): ColumnDef<Course>[] => [
   {
-    accessorKey: "courseName",
+    accessorKey: "title",
     header: ({ column }) => {
       return (
         <Button
@@ -41,11 +45,11 @@ export const columns: ColumnDef<Course>[] = [
     },
   },
   {
-    accessorKey: "fileType",
+    accessorKey: "file_type",
     header: "File Type",
   },
   {
-    accessorKey: "uploadDate",
+    accessorKey: "uploaded_at",
     header: ({ column }) => {
       return (
         <Button
@@ -64,6 +68,39 @@ export const columns: ColumnDef<Course>[] = [
     cell: ({ row }) => {
       const course = row.original;
 
+      async function handleDelete() {
+        const confirm = window.confirm(
+          "Are you sure you wnat to delete This course"
+        );
+
+        if (!confirm) return;
+
+        // delete from table
+        const { error } = await supabase
+          .from("study_material")
+          .delete()
+          .eq("id", course.id);
+
+        if (error) {
+          toast.error("Failed to delete course");
+          console.log(error);
+          return;
+        }
+
+        // delete from bucket
+
+        const { error: storageError } = await supabase.storage
+          .from("study-materials")
+          .remove([course.file_url]);
+
+        if (storageError) {
+          toast.warning("Course delted, but file not removed from storage");
+          console.warn(storageError.message);
+        }
+        toast.success("course deleted");
+        onSuccess?.();
+      }
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -77,14 +114,18 @@ export const columns: ColumnDef<Course>[] = [
               Actions
             </DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(course.courseCode)}
+              onClick={() => navigator.clipboard.writeText(course.course_code)}
             >
               Copy courseCode
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem> Edit</DropdownMenuItem>
-            <DropdownMenuItem className="bg-red-500 text-white rounded-[1px]">
-              {" "}
+            <DropdownMenuItem asChild>
+              <EditCourseForm course={course} onSuccess={onSuccess} />
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="bg-red-500 text-white rounded-[1px]"
+              onClick={handleDelete}
+            >
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
