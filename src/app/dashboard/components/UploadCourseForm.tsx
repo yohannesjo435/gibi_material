@@ -19,7 +19,13 @@ import { toast } from "sonner";
 import { uploadFile } from "@/lib/storage";
 import { supabase } from "@/lib/supabaseClient";
 
-const UploadCourseForm = () => {
+const UploadCourseForm = ({
+  departmentId,
+  onSuccess,
+}: {
+  departmentId?: string | null;
+  onSuccess?: () => void;
+}) => {
   const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState("");
 
@@ -33,6 +39,7 @@ const UploadCourseForm = () => {
   const [tagsState, setTags] = useState("");
   const [descriptionState, setDescription] = useState("");
   const [year, setYear] = useState("");
+  console.log("deaprtmetn id for upload: ", departmentId);
 
   async function handleUpload(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -62,18 +69,20 @@ const UploadCourseForm = () => {
         file_key: key,
         original_filename: file.name,
         year: "year " + year,
+        department_id: departmentId,
       });
       if (error) throw error;
       setUrl(url);
       setUploadSucess(true);
-      if (uploadSucess) {
-        toast.success("The file has been uploaded");
-      }
+      toast.success("The file has been uploaded");
+
+      // notify parent to refresh materials
+      if (onSuccess) onSuccess();
     } catch (err) {
       console.error("Upload failed: ", err);
+    } finally {
       setIsUploading(false);
     }
-    setIsUploading(false);
 
     //reset inputs
     setTitle("");
