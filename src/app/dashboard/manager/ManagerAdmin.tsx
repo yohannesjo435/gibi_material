@@ -14,6 +14,35 @@ export default function ManagerAdmin() {
   const [materialData, setMaterialData] = useState<Course[]>([]);
   const [usersData, setUsersData] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+  const [departmentId, setDepartmentId] = useState("");
+
+  async function getUserDepartment() {
+    setLoading(true);
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    const userId = session?.user.id;
+
+    if (!userId) {
+      console.error("No user session");
+      setLoading(false);
+      return;
+    }
+
+    const { data: profile, error: profileError } = await supabase
+      .from("users")
+      .select("department_id")
+      .eq("auth_id", userId)
+      .maybeSingle();
+
+    if (profileError || !profile) {
+      console.error("Failed to load profile", profileError);
+      setLoading(false);
+      return;
+    }
+
+    setDepartmentId(profile.department_id);
+  }
 
   const loadMaterials = async () => {
     const { data, error } = await supabase.from("study_material").select("*");
@@ -38,6 +67,7 @@ export default function ManagerAdmin() {
   useEffect(() => {
     setLoading(true);
     // kick off both fetches in parallel
+    getUserDepartment();
     Promise.all([loadUsers(), loadMaterials()]).then(() => setLoading(false));
   }, []);
 
@@ -55,7 +85,14 @@ export default function ManagerAdmin() {
           meta={{ reloadData: loadUsers }}
         />
 
-        {loading ? <SkeletonUploadCourseForm /> : <UploadCourseForm />}
+        {loading ? (
+          <SkeletonUploadCourseForm />
+        ) : (
+          <UploadCourseForm
+            departmentId={departmentId}
+            onSuccess={loadMaterials}
+          />
+        )}
 
         <CreateDepartmentForm />
       </div>
