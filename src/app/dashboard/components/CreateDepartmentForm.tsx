@@ -84,6 +84,7 @@ const CreateDepartmentForm = () => {
       body: JSON.stringify(formData),
       headers: { "Content-Type": "application/json" },
     });
+    console.log("res:", res);
 
     const result = await res.json();
     console.log("Server response: ", result);
@@ -95,6 +96,7 @@ const CreateDepartmentForm = () => {
     setNewFaculty("");
     setFacultyId("");
     setIconFile(null);
+    toast.success("department has been created.");
   }
 
   async function handleCreateFaculty() {
@@ -112,7 +114,6 @@ const CreateDepartmentForm = () => {
       if (res.ok) {
         toast.success(`Faculty "${newFaculty}" created`);
         const data = await res.json();
-
         //for drop down select after the new faculty get created
         const newFac: Faculty = {
           id: data.facultyId,

@@ -1,14 +1,15 @@
-import { supabase } from "@/lib/supabaseClient";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function Create(body: object) {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("faculties")
     .insert([body])
     .select();
 
   if (error) {
-    return { sucess: false, error: error };
+    // throw so caller (API route) returns a 500 and logs the error
+    throw error;
   }
 
-  return { sucess: true, faculty: data[0] };
+  return { success: true, faculty: data[0] };
 }

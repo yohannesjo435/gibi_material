@@ -24,6 +24,9 @@ export const FilterMaterial = ({
   activeYear: string | null;
   activeFileType: string | null;
 }) => {
+  // console.log("active year: ", typeof activeYear?.toLowerCase());
+  // console.log("selected year", typeof selectedYear[0].toLowerCase());
+
   return (
     <div className="outline-1 min-w-2xs p-5 py-10 flex flex-col gap-3 md:gap-5 rounded-[10px] shadow-2xs">
       <Label className="text-red-400">
@@ -47,7 +50,6 @@ export const FilterMaterial = ({
           </SelectGroup>
         </SelectContent>
       </Select>
-
       <Label>Acadmaic Year</Label>
       <div className="grid grid-cols-4 md:grid-cols-2 gap-3 text-center font-semibold text-[14px] cursor-pointer">
         {selectedYear.map((year, i) => (
