@@ -49,7 +49,7 @@ interface Department {
 }
 
 const MaterialList = ({ departmentId }: { departmentId: string }) => {
-  const [courses, setCourse] = useState([]);
+  const [courses, setCourse] = useState<CourseType[]>([]);
   const [loading, setLoading] = useState(true);
   const [downloadingFileKey, setDownloadingFileKey] = useState("");
 
@@ -155,6 +155,7 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
           setActiveFileType((prev) => (prev === type ? null : type))
         }
         activeFileType={activeFileType}
+        onResults={(list) => setCourse(list)}
       />
       <div className="w-full grid gap-3 outline-1 p-5 rounded-[10px]">
         <div className="flex justify-between items-center max-h-20">
