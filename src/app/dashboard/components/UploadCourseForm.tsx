@@ -68,7 +68,7 @@ const UploadCourseForm = ({
         file_url: url,
         file_key: key,
         original_filename: file.name,
-        year: "year " + year,
+        year: "Year " + year,
         department_id: departmentId,
       });
       if (error) throw error;

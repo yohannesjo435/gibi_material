@@ -70,7 +70,7 @@ export const makeColumns = (onSuccess?: () => void): ColumnDef<Course>[] => [
 
       async function handleDelete() {
         const confirm = window.confirm(
-          "Are you sure you wnat to delete This course"
+          "Are you sure you want to delete This course"
         );
 
         if (!confirm) return;

@@ -7,18 +7,35 @@ export async function POST(req: NextRequest) {
     const data = await Create(body);
     const facultyId = data.faculty.id;
     return NextResponse.json(
-      { sucess: true, facultyId: facultyId },
+      { success: true, facultyId: facultyId },
       {
         status: 201,
       }
     );
   } catch (error) {
     console.log("API", error);
-    return NextResponse.json(
-      { sucess: false, error: "server Error" },
-      {
-        status: 500,
+    // Return detailed error in development to help debugging, but avoid leaking details in production
+    const isProd = process.env.NODE_ENV === "production";
+    let errorMessage = "unknown error";
+    if (isProd) {
+      errorMessage = "server error";
+    } else {
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === "string") {
+        errorMessage = error;
+      } else {
+        try {
+          errorMessage = JSON.stringify(error);
+        } catch {
+          errorMessage = String(error);
+        }
       }
+    }
+
+    return NextResponse.json(
+      { success: false, error: errorMessage },
+      { status: 500 }
     );
   }
 }

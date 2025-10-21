@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabaseClient";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 interface FormData {
   name: string;
   short_name: string;
@@ -7,7 +7,7 @@ interface FormData {
 }
 
 export async function Create(formData: FormData) {
-  const { error } = await supabase.from("departments").insert([formData]);
+  const { error } = await supabaseAdmin.from("departments").insert([formData]);
 
   if (error) {
     console.error("Error while inserting data: ", error);
