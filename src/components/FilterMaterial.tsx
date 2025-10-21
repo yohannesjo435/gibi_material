@@ -27,7 +27,7 @@ export const FilterMaterial = ({
   onFileTypeSelect: (type: string | null) => void;
   activeYear: string | null;
   activeFileType: string | null;
-  onResults?: (results: any[]) => void;
+  onResults?: (results: unknown[]) => void;
 }) => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);

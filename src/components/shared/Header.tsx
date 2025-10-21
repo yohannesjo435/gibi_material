@@ -29,7 +29,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 function Header() {
   const router = useRouter();
-  const { user, loading } = useAuthSession();
+  const { user } = useAuthSession();
   const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
