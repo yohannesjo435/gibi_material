@@ -16,14 +16,26 @@ export async function POST(req: NextRequest) {
     console.log("API", error);
     // Return detailed error in development to help debugging, but avoid leaking details in production
     const isProd = process.env.NODE_ENV === "production";
-    const errorMessage = isProd
-      ? "server error"
-      : (error as any)?.message ?? "unknown error";
+    let errorMessage = "unknown error";
+    if (isProd) {
+      errorMessage = "server error";
+    } else {
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === "string") {
+        errorMessage = error;
+      } else {
+        try {
+          errorMessage = JSON.stringify(error);
+        } catch {
+          errorMessage = String(error);
+        }
+      }
+    }
+
     return NextResponse.json(
       { success: false, error: errorMessage },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }
