@@ -10,6 +10,7 @@ function FacultyAdmin() {
   const [data, setData] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [departmentId, setDepartmentId] = useState("");
+  const [facultyId, setFacultyId] = useState("");
 
   async function loadMaterials() {
     setLoading(false);
@@ -27,7 +28,7 @@ function FacultyAdmin() {
 
     const { data: profile, error: profileError } = await supabase
       .from("users")
-      .select("department_id")
+      .select("department_id, faculty_id")
       .eq("auth_id", userId)
       .maybeSingle();
 
@@ -38,7 +39,10 @@ function FacultyAdmin() {
     }
 
     setDepartmentId(profile.department_id);
+    setFacultyId(profile.faculty_id);
+
     console.log("departmetn id: ", profile.department_id);
+    console.log("faculty id tgege: ", profile.faculty_id);
     const { data: materials, error: materialsError } = await supabase
       .from("study_material")
       .select("*")
@@ -59,7 +63,11 @@ function FacultyAdmin() {
   return (
     <div className="w-[87%] m-auto my-10 ">
       <h1 className="text-4xl mb-5">Admin Panel</h1>
-      <UploadCourseForm departmentId={departmentId} onSuccess={loadMaterials} />
+      <UploadCourseForm
+        departmentId={departmentId}
+        onSuccess={loadMaterials}
+        facultyId={facultyId}
+      />
 
       <h1 className="text-4xl mt-14 mb-2">Manage Existing Materials</h1>
       <h4 className="mb-7 text-gray-500 text-[13px]">

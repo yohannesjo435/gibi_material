@@ -15,6 +15,7 @@ export default function ManagerAdmin() {
   const [usersData, setUsersData] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [departmentId, setDepartmentId] = useState("");
+  const [facultyId, setFacultyId] = useState("");
 
   async function getUserDepartment() {
     setLoading(true);
@@ -31,7 +32,7 @@ export default function ManagerAdmin() {
 
     const { data: profile, error: profileError } = await supabase
       .from("users")
-      .select("department_id")
+      .select("*")
       .eq("auth_id", userId)
       .maybeSingle();
 
@@ -42,6 +43,9 @@ export default function ManagerAdmin() {
     }
 
     setDepartmentId(profile.department_id);
+    setFacultyId(profile.faculty_id);
+    console.log("departmetn id all: ", profile);
+    // console.log("faculty id tgege: ", profile.faculty_id);
   }
 
   const loadMaterials = async () => {
@@ -91,6 +95,7 @@ export default function ManagerAdmin() {
           <UploadCourseForm
             departmentId={departmentId}
             onSuccess={loadMaterials}
+            facultyId={facultyId}
           />
         )}
 

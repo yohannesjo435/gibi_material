@@ -31,6 +31,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { formatPhone, phoneToEmail } from "@/lib/phone";
+import { supabase } from "@/lib/supabaseClient";
 interface Department {
   id: string;
   name: string;
@@ -44,6 +45,7 @@ function Page() {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setloading] = useState(true);
   const [departmentId, setDepartmentId] = useState("");
+  const [facultyId, setfacultyId] = useState("");
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
@@ -76,6 +78,30 @@ function Page() {
   };
   FetchAllDepartments();
 
+  const getFacultyId = async (departmentId: string) => {
+    try {
+      setloading(true);
+      console.log("facu: ", departmentId);
+      const res = await fetch(`/api/departments/getFacultyId/${departmentId}`);
+      if (!res.ok) {
+        console.error("Failed to fetch department");
+        return;
+      }
+      const data = await res.json();
+      setfacultyId(data.facultyId);
+      console.log("tegtoal: ", facultyId);
+    } catch (err) {
+      console.log("fetch Error: ", err);
+    } finally {
+      setloading(false);
+    }
+  };
+  useEffect(() => {
+    if (departmentId) {
+      getFacultyId(departmentId);
+    }
+  }, [departmentId]);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setloading(true);
@@ -101,6 +127,7 @@ function Page() {
         email: email,
         password,
         departmentId,
+        facultyId,
       }),
     });
 
