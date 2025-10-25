@@ -21,10 +21,12 @@ import { supabase } from "@/lib/supabaseClient";
 
 const UploadCourseForm = ({
   departmentId,
+  facultyId,
   onSuccess,
 }: {
   departmentId?: string | null;
   onSuccess?: () => void;
+  facultyId: string | null;
 }) => {
   const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState("");
@@ -39,7 +41,6 @@ const UploadCourseForm = ({
   const [tagsState, setTags] = useState("");
   const [descriptionState, setDescription] = useState("");
   const [year, setYear] = useState("");
-  console.log("deaprtmetn id for upload: ", departmentId);
 
   async function handleUpload(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -48,7 +49,7 @@ const UploadCourseForm = ({
       return;
     }
     const sanitizedName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
-    const key = `${Date.now()}-${sanitizedName}`;
+    const key = `faculty_${facultyId}/department_${departmentId}/${Date.now()}-${sanitizedName}`;
 
     const form = new FormData(e.currentTarget);
     const courseName = form.get("courseName") as string; //aka title

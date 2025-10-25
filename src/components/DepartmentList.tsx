@@ -133,12 +133,15 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
                   onClick={() => onSelect(dep.id)}
                 >
                   <CardHeader className="flex items-center gap-3.5">
-                    <Image
-                      src={"/is.png"}
-                      width={25}
-                      height={25}
-                      alt="course Icons"
-                    />
+                    {dep.icon_url && (
+                      <Image
+                        src={dep.icon_url}
+                        width={55}
+                        height={45}
+                        alt="course Icons"
+                      />
+                    )}
+
                     <div>
                       <CardTitle>{dep.name}</CardTitle>
                       <CardDescription>{dep.short_name}</CardDescription>

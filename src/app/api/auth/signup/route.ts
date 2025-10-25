@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { fullName, phone, email, password, departmentId } = await req.json();
+    const { fullName, phone, email, password, departmentId, facultyId } =
+      await req.json();
     console.log(`   
       from api      
         full_name: ${fullName},
@@ -38,6 +39,7 @@ export async function POST(req: NextRequest) {
         full_name: fullName,
         phone_number: phone,
         department_id: departmentId,
+        faculty_id: facultyId,
         role: "pending",
         status: "pending",
       },
