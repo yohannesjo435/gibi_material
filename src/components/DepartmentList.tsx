@@ -80,12 +80,6 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
     fetchDepartments();
   }, []);
 
-  useEffect(() => {
-    if (departments.length > 0) {
-      // console.log("departments: ", departments);
-    }
-  }, [departments]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [departmentPerPage] = useState(8);
 
@@ -172,7 +166,7 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
       <AppPagination
         className="mt-5 md:mt-10 shadow-2xs"
         depPerPage={departmentPerPage}
-        totalDep={departments.length}
+        totalDep={departments?.length ?? 0}
         paginate={paginate}
         currentPage={currentPage}
       />

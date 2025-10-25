@@ -7,8 +7,9 @@ export async function Create(body: object) {
     .select();
 
   if (error) {
-    return { sucess: false, error: error };
+    // throw so caller (API route) returns a 500 and logs the error
+    throw error;
   }
 
-  return { sucess: true, faculty: data[0] };
+  return { success: true, faculty: data[0] };
 }

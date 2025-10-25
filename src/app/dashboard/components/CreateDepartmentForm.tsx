@@ -138,7 +138,6 @@ const CreateDepartmentForm = () => {
       if (res.ok) {
         toast.success(`Faculty "${newFaculty}" created`);
         const data = await res.json();
-
         //for drop down select after the new faculty get created
         const newFac: Faculty = {
           id: data.facultyId,
