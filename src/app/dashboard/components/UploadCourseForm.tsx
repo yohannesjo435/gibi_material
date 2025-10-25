@@ -41,7 +41,6 @@ const UploadCourseForm = ({
   const [tagsState, setTags] = useState("");
   const [descriptionState, setDescription] = useState("");
   const [year, setYear] = useState("");
-  console.log("deaprtmetn id for upload: ", departmentId);
 
   async function handleUpload(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

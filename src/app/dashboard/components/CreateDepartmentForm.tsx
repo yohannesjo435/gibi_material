@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
+import { uploadIcon } from "@/lib/storage";
 
 interface Faculty {
   id: string;
@@ -42,7 +43,11 @@ const CreateDepartmentForm = () => {
   const [facultyId, setFacultyId] = useState("");
   const [faculties, setFaculties] = useState<Faculty[]>([]);
   const [newFaculty, setNewFaculty] = useState("");
+  const [iconUrl, setIconUrl] = useState("");
   const [isCreatingFacutly, setIsCreatingFacutly] = useState(false);
+  const iconBucket = "department_icon";
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     async function fetchFaculties() {
       try {
@@ -72,21 +77,41 @@ const CreateDepartmentForm = () => {
       }
       return result;
     }
-    const formData = {
-      name: departmentName,
-      short_name: shortName,
-      available_years: changeAvailbleYearsToArray(Number(availableYears)),
-      faculty_id: facultyId,
-    };
-    console.log("form data: ", formData);
-    const res = await fetch("/api/departments/create", {
-      method: "POST",
-      body: JSON.stringify(formData),
-      headers: { "Content-Type": "application/json" },
-    });
 
-    const result = await res.json();
-    console.log("Server response: ", result);
+    if (!iconFile || !departmentName || !availableYears) {
+      alert("Please fill out all fields and select a file.");
+      return;
+    }
+
+    const sanitizedName = iconFile.name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
+    const key = `faculty_${facultyId}/${Date.now()}-${sanitizedName}`;
+
+    try {
+      setLoading(true);
+      const { url } = await uploadIcon(iconBucket, key, iconFile);
+      setIconUrl(url);
+      if (url) {
+        const formData = {
+          name: departmentName,
+          short_name: shortName,
+          available_years: changeAvailbleYearsToArray(Number(availableYears)),
+          faculty_id: facultyId,
+          icon_url: url,
+        };
+        console.log("form data: ", formData);
+        const res = await fetch("/api/departments/create", {
+          method: "POST",
+          body: JSON.stringify(formData),
+          headers: { "Content-Type": "application/json" },
+        });
+        const result = await res.json();
+        console.log("Server response: ", result);
+      }
+    } catch (err) {
+      console.error("Upload Failed", err);
+    } finally {
+      setLoading(false);
+    }
 
     ///empty the input
     setDepartmentName("");
@@ -95,6 +120,7 @@ const CreateDepartmentForm = () => {
     setNewFaculty("");
     setFacultyId("");
     setIconFile(null);
+    setIconUrl("");
   }
 
   async function handleCreateFaculty() {
@@ -150,7 +176,8 @@ const CreateDepartmentForm = () => {
           <Input
             className="max-w-48"
             type="file"
-            onChange={(e) => setIconFile(e.target.files?.[0] || null)}
+            value={undefined}
+            onChange={(e) => setIconFile(e.target.files?.[0] ?? null)}
             required
           />
         </div>{" "}
@@ -218,10 +245,7 @@ const CreateDepartmentForm = () => {
             />
           </div>
         </div>
-        <Button
-          className="py-5 bg-blue-500 cursor-pointer"
-          // disabled={isUploading}
-        >
+        <Button className="py-5 bg-blue-500 cursor-pointer" disabled={loading}>
           Upload
         </Button>
       </div>

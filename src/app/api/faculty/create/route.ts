@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const data = await Create(body);
-    const facultyId = data.faculty.id;
+    const facultyId = await data.faculty.id;
     return NextResponse.json(
       { sucess: true, facultyId: facultyId },
       {
