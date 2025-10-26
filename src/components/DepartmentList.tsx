@@ -142,7 +142,7 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
                     {dep.icon_url && (
                       <Image
                         src={dep.icon_url}
-                        width={55}
+                        width={45}
                         height={45}
                         alt="course Icons"
                       />
@@ -172,7 +172,7 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
       <AppPagination
         className="mt-5 md:mt-10 shadow-2xs"
         depPerPage={departmentPerPage}
-        totalDep={departments.length}
+        totalDep={departments?.length ?? 0}
         paginate={paginate}
         currentPage={currentPage}
       />

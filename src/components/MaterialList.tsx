@@ -20,7 +20,7 @@ import { FilterMaterial } from "./FilterMaterial";
 
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { Eye, HardDriveDownload } from "lucide-react";
+import { Eye, HardDriveDownload, LibraryBig } from "lucide-react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { SkeletonDepCard } from "./shared/AppSkeleton";
@@ -194,22 +194,17 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
               {filteredCourses.map((dep: CourseType, index) => (
                 <Card
                   key={index}
-                  className="cursor-pointer max-h-32 w-[100%] grid grid-cols-1 bg-red md:grid-cols-2"
+                  className="cursor-pointer h-32 w-[100%] grid grid-cols-1 bg-red md:grid-cols-2"
                 >
                   <CardHeader className="flex flex-row-reverse justify-between md:justify-start md:flex-row md:items-center md:gap-3.5">
-                    <Image
-                      src={"/is.png"}
-                      width={30}
-                      height={30}
-                      alt="course Icons"
-                    />
+                    <LibraryBig size={30} />
                     <div className="grid gap-1">
                       <CardTitle>{dep.title}</CardTitle>
                       <div className="flex gap-2">
                         <CardDescription>{dep.short_name}</CardDescription>
                         <CardDescription>{dep.author}</CardDescription>
                         <CardDescription className="font-medium">
-                          {byteToMb(dep.file_size_bytes)} mb
+                          {byteToMb(dep.file_size_bytes) ?? "_"} mb
                         </CardDescription>
                         <CardDescription>
                           {formatDate(dep.uploaded_at)}
@@ -242,7 +237,7 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
                         Download
                       </Button>
 
-                      <Button className="w-[10%] md:hidden cursor-pointer ">
+                      <Button className="w-[20%] md:hidden cursor-pointer ">
                         <HardDriveDownload />
                       </Button>
                     </CardAction>
