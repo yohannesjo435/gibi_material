@@ -79,6 +79,7 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
     if (courses.length > 0) {
       console.log("courses: ", courses);
     }
+    console.log("fetched course: ", courses);
   }, [courses]);
 
   useEffect(() => {

@@ -80,12 +80,6 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
     fetchDepartments();
   }, []);
 
-  useEffect(() => {
-    if (departments.length > 0) {
-      // console.log("departments: ", departments);
-    }
-  }, [departments]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [departmentPerPage] = useState(8);
 
