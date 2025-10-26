@@ -195,7 +195,7 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
               {filteredCourses.map((dep: CourseType, index) => (
                 <Card
                   key={index}
-                  className="cursor-pointer h-32 w-[100%] grid grid-cols-1 bg-red md:grid-cols-2"
+                  className="cursor-pointer min-h-32 w-[100%] grid grid-cols-1 bg-red md:grid-cols-2 py-2"
                 >
                   <CardHeader className="flex flex-row-reverse justify-between md:justify-start md:flex-row md:items-center md:gap-3.5">
                     <LibraryBig size={30} />
@@ -238,7 +238,16 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
                         Download
                       </Button>
 
-                      <Button className="w-[20%] md:hidden cursor-pointer ">
+                      <Button
+                        className="w-[20%] md:hidden cursor-pointer"
+                        onClick={() =>
+                          handleDownload(
+                            dep.file_url,
+                            dep.original_filename,
+                            dep.file_key
+                          )
+                        }
+                      >
                         <HardDriveDownload />
                       </Button>
                     </CardAction>
