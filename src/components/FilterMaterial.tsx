@@ -102,7 +102,7 @@ export const FilterMaterial = ({
         <Label>File Type</Label>
         <div className="flex gap-2">
           {[
-            { label: "PDF", value: "pdf", style: "bg-red-100 text-red-500" },
+            { label: "PDF", value: "pdf", style: "bg-red-100 text-red-500 " },
             { label: "PPT", value: "ppt", style: "bg-blue-100 text-blue-600" },
             {
               label: "DOCS",
@@ -120,7 +120,7 @@ export const FilterMaterial = ({
               className={`px-3 py-1 rounded-[5px] ${
                 activeFileType === type.value
                   ? `${type.style} border-transparent`
-                  : "outline-1 text-white font-semiboldbold"
+                  : "outline-1 text-black dark:text-white font-semiboldbold"
               }`}
             >
               {type.value}
