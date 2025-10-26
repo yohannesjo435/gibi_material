@@ -10,7 +10,7 @@ const Footer = () => {
         <ul className="text-[16px] grid gap-2">
           <li>GOFERE TECH</li>
           <li>gibimaterail@gmail.com</li>
-          <li>+251-901964187</li>
+          {/* <li>+251-901964187</li> */}
         </ul>
       </div>
 
@@ -33,8 +33,8 @@ const Footer = () => {
             <hr className="w-44 md:w-24 lg:w-44 mb-5" />
             <li>Blog</li>
             <li>Ai</li>
-            <li>gibimaterail@Gmail.com</li>
-            <li>+251-901964187</li>
+            <li>yohannesgoat@Gmail.com</li>
+            {/* <li>+251-901964187</li> */}
             <li>Blog</li>
             <li>Ai</li>
           </ul>

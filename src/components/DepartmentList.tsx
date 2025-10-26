@@ -55,7 +55,6 @@ const DepartmentList = ({ onSelect }: { onSelect: (id: string) => void }) => {
         // API may return { departments: [...] } or { department: [...] } or raw array
         const list = json?.departments ?? json?.department ?? json ?? [];
         setResults(list);
-        console.log("results: ", list);
       }
     } catch {
     } finally {

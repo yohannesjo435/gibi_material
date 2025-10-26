@@ -55,7 +55,6 @@ export const FilterMaterial = ({
         const list = json?.courses ?? json?.course ?? json ?? [];
         setResults(list);
         onResults?.(list);
-        console.log("results: ", list);
       }
     } catch (error) {
       console.log(error);

@@ -76,13 +76,6 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
   }, [departmentId]);
 
   useEffect(() => {
-    if (courses.length > 0) {
-      console.log("courses: ", courses);
-    }
-    console.log("fetched course: ", courses);
-  }, [courses]);
-
-  useEffect(() => {
     async function GetDepartment() {
       const res = await fetch(`/api/departments/${departmentId}`, {
         method: "GET",
@@ -94,7 +87,6 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
       const data = await res.json();
       setDepartment(data.department);
       setSelectedYear(data.department.available_years);
-      console.log("dep: ", data.department);
     }
     GetDepartment();
   }, [departmentId]);

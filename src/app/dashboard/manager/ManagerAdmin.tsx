@@ -44,8 +44,6 @@ export default function ManagerAdmin() {
 
     setDepartmentId(profile.department_id);
     setFacultyId(profile.faculty_id);
-    console.log("departmetn id all: ", profile);
-    // console.log("faculty id tgege: ", profile.faculty_id);
   }
 
   const loadMaterials = async () => {

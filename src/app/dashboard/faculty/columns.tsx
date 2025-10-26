@@ -94,7 +94,7 @@ export const makeColumns = (onSuccess?: () => void): ColumnDef<Course>[] => [
           .remove([course.file_url]);
 
         if (storageError) {
-          toast.warning("Course delted, but file not removed from storage");
+          toast.warning("Course deleted, but file not removed from storage");
           console.warn(storageError.message);
         }
         toast.success("course deleted");

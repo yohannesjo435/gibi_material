@@ -42,7 +42,6 @@ export async function uploadIcon(bucket: string, key: string, file: File) {
   if (!Iconurl) {
     throw new Error("Failed to generate public URL");
   }
-  console.log("icon: ", Iconurl.publicUrl);
 
   return { url: Iconurl.publicUrl, provider: "supabase" };
 }

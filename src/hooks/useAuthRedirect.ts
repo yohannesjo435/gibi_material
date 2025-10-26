@@ -13,7 +13,6 @@ export const useAuthRedirect = () => {
       if (!data.session) {
         router.push("/auth/login");
       } else {
-        console.log("I found the session: ", data);
         setLoading(false);
       }
     };

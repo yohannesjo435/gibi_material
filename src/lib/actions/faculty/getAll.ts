@@ -8,6 +8,5 @@ export async function getAll() {
   if (error) {
     console.log("Error occures while get data from supabase: ", error);
   }
-  console.log("data: ", data);
   return data;
 }

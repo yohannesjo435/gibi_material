@@ -44,7 +44,8 @@ const UploadCourseForm = ({
 
   async function handleUpload(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!file || !title || !fileType) {
+
+    if (!file) {
       alert("Please fill out all fields and select a file.");
       return;
     }

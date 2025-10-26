@@ -41,8 +41,6 @@ function FacultyAdmin() {
     setDepartmentId(profile.department_id);
     setFacultyId(profile.faculty_id);
 
-    console.log("departmetn id: ", profile.department_id);
-    console.log("faculty id tgege: ", profile.faculty_id);
     const { data: materials, error: materialsError } = await supabase
       .from("study_material")
       .select("*")

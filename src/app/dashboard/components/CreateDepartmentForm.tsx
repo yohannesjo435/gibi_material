@@ -62,12 +62,6 @@ const CreateDepartmentForm = () => {
     fetchFaculties();
   }, []);
 
-  useEffect(() => {
-    if (faculties) {
-      console.log("all fac: ", faculties);
-    }
-  }, [faculties]);
-
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     function changeAvailbleYearsToArray(availableYears: number) {
@@ -98,14 +92,12 @@ const CreateDepartmentForm = () => {
           faculty_id: facultyId,
           icon_url: url,
         };
-        console.log("form data: ", formData);
         const res = await fetch("/api/departments/create", {
           method: "POST",
           body: JSON.stringify(formData),
           headers: { "Content-Type": "application/json" },
         });
         const result = await res.json();
-        console.log("Server response: ", result);
       }
     } catch (err) {
       console.error("Upload Failed", err);
@@ -124,7 +116,6 @@ const CreateDepartmentForm = () => {
   }
 
   async function handleCreateFaculty() {
-    console.log("new: ", newFaculty);
     if (!newFaculty.trim()) return;
     setIsCreatingFacutly(true);
 
@@ -283,12 +274,9 @@ function FacultyDropdown({
             },
           }
         );
-        console.log("Searched res: ", res);
         const data = await res.json();
 
-        console.log("Searched res: ", data);
         if (data.faculty) {
-          console.log("found the name: ", data.faculty.name);
           setFaculties([data.faculty]);
           setFacultyLoading(false);
         }

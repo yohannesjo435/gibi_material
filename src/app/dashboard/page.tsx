@@ -11,14 +11,10 @@ function Dashboard() {
   const { loading } = useAuthRedirect();
   const [role, setRole] = useState<string>();
 
-  console.log("auth redirect: ", loading);
-
   useEffect(() => {
     const fetchRole = async () => {
       const role = await getUserRole();
-      if (role) {
-        console.log("role: ", role);
-      }
+
       setRole(role?.role);
     };
 

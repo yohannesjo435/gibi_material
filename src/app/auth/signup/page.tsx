@@ -61,7 +61,7 @@ function Page() {
           const res = await fetch("/api/departments");
           if (!res) throw new Error("Failed to fetch Departments. ");
           if (!res.ok) {
-            console.log("fialed to fetch Department");
+            console.log("failed to fetch Department");
             return;
           }
           const data = await res.json();
@@ -81,7 +81,6 @@ function Page() {
   const getFacultyId = async (departmentId: string) => {
     try {
       setloading(true);
-      console.log("facu: ", departmentId);
       const res = await fetch(`/api/departments/getFacultyId/${departmentId}`);
       if (!res.ok) {
         console.error("Failed to fetch department");
@@ -89,7 +88,6 @@ function Page() {
       }
       const data = await res.json();
       setfacultyId(data.facultyId);
-      console.log("tegtoal: ", facultyId);
     } catch (err) {
       console.log("fetch Error: ", err);
     } finally {
@@ -177,7 +175,7 @@ function Page() {
                 <div className="grid gap-2">
                   <Label htmlFor="">
                     Phone Number{" "}
-                    <span className="text-red-500">(start with 09)</span>
+                    {/* <span className="text-red-500">(start with 09)</span> */}
                   </Label>
                   <Input
                     id="phone_number"

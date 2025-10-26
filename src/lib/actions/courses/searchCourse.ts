@@ -1,7 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 
 export async function searchCourse(query: string) {
-  console.log("query from action: ", query);
   const trimmed = query.trim();
   if (!trimmed) return [];
 
