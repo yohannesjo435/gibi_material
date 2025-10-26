@@ -240,6 +240,7 @@ const MaterialList = ({ departmentId }: { departmentId: string }) => {
 
                       <Button
                         className="w-[20%] md:hidden cursor-pointer"
+                        disabled={downloadingFileKey === dep.file_key}
                         onClick={() =>
                           handleDownload(
                             dep.file_url,
